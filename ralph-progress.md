@@ -9,3 +9,4 @@
 ## Iteration 2
 - Added a briefing focus section to surface risks, experiments, and partner commitments in a single scan.
 - Designed new insight cards with decision-log framing, ownership, and due dates to keep the brief actionable.
+- Redeployed to https://groupscholar-briefing-room.vercel.app.

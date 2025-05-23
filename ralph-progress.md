@@ -15,3 +15,8 @@
 - Added a Field Notes section to capture scholar voice, reviewer sentiment, partner whispers, and ambassador cues in a single scan.
 - Designed a new pulse module and note cards to highlight qualitative signals alongside weekly metrics.
 - Redeployed the Briefing Room to https://groupscholar-briefing-room.vercel.app.
+
+## Iteration 4
+- Added a Decision Studio section to translate weekly signals into executive-ready calls with ownership, timing, and confidence markers.
+- Designed new decision cards plus a status lane to highlight verified signals, coverage gaps, and escalations.
+- Redeployed the Briefing Room to https://groupscholar-briefing-room.vercel.app.

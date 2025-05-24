@@ -885,6 +885,10 @@ main {
     align-items: flex-start;
   }
 
+  .pack-header {
+    align-items: flex-start;
+  }
+
   .note-pulse {
     grid-template-columns: 1fr;
     width: 100%;

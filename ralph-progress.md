@@ -22,6 +22,11 @@
 - Redeployed the Briefing Room to https://groupscholar-briefing-room.vercel.app.
 
 ## Iteration 5
+- Added a Brief Pack builder section to auto-assemble assets, stakeholder routes, and readiness checks for leadership delivery.
+- Designed new pack cards with narrative stack, routing tags, coverage score, and checklist signals.
+- Redeployed the Briefing Room to https://groupscholar-briefing-room.vercel.app.
+
+## Iteration 5
 - Added a Briefing Pack Builder section to assemble verified signals, narrative lanes, and a prep checklist in one flow.
 - Designed new readiness panels, narrative lane cards, and a briefing footer bar to clarify ownership and timing.
 - Redeployed the Briefing Room to https://groupscholar-briefing-room.vercel.app.

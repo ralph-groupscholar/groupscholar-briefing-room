@@ -30,3 +30,8 @@
 - Added a Briefing Pack Builder section to assemble verified signals, narrative lanes, and a prep checklist in one flow.
 - Designed new readiness panels, narrative lane cards, and a briefing footer bar to clarify ownership and timing.
 - Redeployed the Briefing Room to https://groupscholar-briefing-room.vercel.app.
+
+## Iteration 6
+- Added a Live Ops Signals section that pulls updates from the briefing database into the brief.
+- Implemented a Vercel serverless API with Postgres connectivity and seeded the production table with initial signals.
+- Deployment attempt hit the Vercel daily limit; retry after February 9, 2026 to refresh https://groupscholar-briefing-room.vercel.app.

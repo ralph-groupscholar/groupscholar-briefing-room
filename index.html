@@ -221,6 +221,82 @@
         </div>
       </section>
 
+      <section class="signal-room">
+        <div class="signal-header">
+          <div>
+            <h2>Live ops signals</h2>
+            <p>
+              A real-time stream of the operational moves and risks flowing
+              into this week's narrative, synced from the briefing database.
+            </p>
+          </div>
+          <div class="signal-status">
+            <span>Last sync</span>
+            <strong id="signal-status">Loading updates...</strong>
+          </div>
+        </div>
+        <div class="signal-grid" id="signal-grid">
+          <article class="signal-card">
+            <span class="signal-label">Syncing</span>
+            <h3>Pulling live signals</h3>
+            <p>Stand by while we connect to the latest briefing feed.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="signal-summary">
+        <div class="summary-header">
+          <div>
+            <h2>Signal coverage</h2>
+            <p>
+              A quick read on urgency mix, due dates, and which pods are driving
+              the most activity this week.
+            </p>
+          </div>
+          <div class="summary-status">
+            <span>Coverage status</span>
+            <strong id="summary-coverage">Loading coverage…</strong>
+            <em id="summary-updated">Awaiting sync</em>
+          </div>
+        </div>
+        <div class="summary-grid">
+          <article class="summary-card">
+            <span class="summary-label">Active signals</span>
+            <h3 id="summary-total">--</h3>
+            <p id="summary-window">Tracked for this briefing cycle.</p>
+          </article>
+          <article class="summary-card highlight">
+            <span class="summary-label">Priority mix</span>
+            <div class="summary-pill-row">
+              <div>
+                <strong id="summary-high">--</strong>
+                <span>High</span>
+              </div>
+              <div>
+                <strong id="summary-medium">--</strong>
+                <span>Medium</span>
+              </div>
+              <div>
+                <strong id="summary-low">--</strong>
+                <span>Low</span>
+              </div>
+            </div>
+            <p>Balance the brief with the right intensity.</p>
+          </article>
+          <article class="summary-card">
+            <span class="summary-label">Due soon</span>
+            <h3 id="summary-due">--</h3>
+            <p id="summary-overdue">-- overdue</p>
+          </article>
+          <article class="summary-card">
+            <span class="summary-label">Top signal owners</span>
+            <ul class="summary-owners" id="summary-owners">
+              <li>Loading owner mix…</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
       <section class="brief-pack">
         <div class="pack-header">
           <div>
@@ -549,5 +625,133 @@
         <button class="primary">Schedule a setup</button>
       </section>
     </main>
+
+    <script>
+      const signalGrid = document.getElementById("signal-grid");
+      const signalStatus = document.getElementById("signal-status");
+      const summaryCoverage = document.getElementById("summary-coverage");
+      const summaryUpdated = document.getElementById("summary-updated");
+      const summaryTotal = document.getElementById("summary-total");
+      const summaryHigh = document.getElementById("summary-high");
+      const summaryMedium = document.getElementById("summary-medium");
+      const summaryLow = document.getElementById("summary-low");
+      const summaryDue = document.getElementById("summary-due");
+      const summaryOverdue = document.getElementById("summary-overdue");
+      const summaryOwners = document.getElementById("summary-owners");
+
+      const formatDate = (value) => {
+        if (!value) return "TBD";
+        const date = new Date(value);
+        return date.toLocaleDateString(undefined, {
+          month: "short",
+          day: "numeric"
+        });
+      };
+
+      const formatSyncTime = (value) => {
+        if (!value) return "Unknown";
+        const date = new Date(value);
+        return date.toLocaleString(undefined, {
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit"
+        });
+      };
+
+      const renderSignals = (signals) => {
+        signalGrid.innerHTML = "";
+
+        signals.forEach((signal) => {
+          const card = document.createElement("article");
+          card.className = "signal-card";
+          card.innerHTML = `
+            <span class="signal-label">${signal.urgency} priority</span>
+            <h3>${signal.title}</h3>
+            <p>${signal.summary}</p>
+            <div class="signal-meta">
+              <span>Owner: ${signal.owner}</span>
+              <span>Target: ${formatDate(signal.target_date)}</span>
+              <span>Source: ${signal.source}</span>
+            </div>
+          `;
+          signalGrid.appendChild(card);
+        });
+      };
+
+      const renderSummary = (payload) => {
+        const summary = payload.summary || {};
+        const owners = payload.owners || [];
+
+        summaryTotal.textContent = summary.total ?? "--";
+        summaryHigh.textContent = summary.high ?? "--";
+        summaryMedium.textContent = summary.medium ?? "--";
+        summaryLow.textContent = summary.low ?? "--";
+        summaryDue.textContent = `${summary.due_soon ?? "--"} due in 7 days`;
+        summaryOverdue.textContent = `${summary.overdue ?? "--"} overdue`;
+
+        summaryCoverage.textContent =
+          summary.total != null
+            ? `${summary.total} signals tracked`
+            : "Coverage unavailable";
+
+        summaryUpdated.textContent = summary.latest_signal_at
+          ? `Latest signal ${formatSyncTime(summary.latest_signal_at)}`
+          : "Latest signal unknown";
+
+        summaryOwners.innerHTML = "";
+        if (!owners.length) {
+          summaryOwners.innerHTML = "<li>No owner data yet.</li>";
+          return;
+        }
+
+        owners.forEach((owner) => {
+          const item = document.createElement("li");
+          item.innerHTML = `<strong>${owner.count}</strong><span>${owner.owner}</span>`;
+          summaryOwners.appendChild(item);
+        });
+      };
+
+      const loadSignals = async () => {
+        try {
+          const response = await fetch("/api/briefing-signals");
+          if (!response.ok) throw new Error("Failed to load signals");
+          const payload = await response.json();
+          renderSignals(payload.signals || []);
+          signalStatus.textContent = formatSyncTime(payload.updatedAt);
+        } catch (error) {
+          signalGrid.innerHTML = `
+            <article class="signal-card">
+              <span class="signal-label">Offline</span>
+              <h3>Signals unavailable</h3>
+              <p>We couldn't reach the briefing feed. Try again soon.</p>
+            </article>
+          `;
+          signalStatus.textContent = "Sync failed";
+        }
+      };
+
+      const loadSummary = async () => {
+        try {
+          const response = await fetch("/api/briefing-summary");
+          if (!response.ok) throw new Error("Failed to load summary");
+          const payload = await response.json();
+          renderSummary(payload);
+        } catch (error) {
+          summaryCoverage.textContent = "Coverage unavailable";
+          summaryUpdated.textContent = "Sync failed";
+          summaryTotal.textContent = "--";
+          summaryHigh.textContent = "--";
+          summaryMedium.textContent = "--";
+          summaryLow.textContent = "--";
+          summaryDue.textContent = "-- due in 7 days";
+          summaryOverdue.textContent = "-- overdue";
+          summaryOwners.innerHTML = "<li>Owner mix unavailable.</li>";
+        }
+      };
+
+      loadSignals();
+      loadSummary();
+    </script>
   </body>
 </html>

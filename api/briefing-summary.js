@@ -1,10 +1,13 @@
 const { Client } = require("pg");
 
 const buildConfig = () => {
+  const sslSetting =
+    process.env.PGSSLMODE === "disable" ? false : { rejectUnauthorized: false };
+
   if (process.env.DATABASE_URL) {
     return {
       connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false }
+      ssl: sslSetting
     };
   }
 
@@ -14,7 +17,7 @@ const buildConfig = () => {
     user: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     database: process.env.PGDATABASE || "postgres",
-    ssl: { rejectUnauthorized: false }
+    ssl: sslSetting
   };
 };
 

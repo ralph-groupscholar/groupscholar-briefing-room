@@ -40,3 +40,8 @@
 - Styled the Signal Coverage dashboard with a distinct summary grid, urgency mix tiles, and owner list layout.
 - Wired the coverage module to surface the latest signal timestamp and sync time in the UI.
 - Attempted to redeploy (blocked by the Vercel free-tier deployment limit).
+
+## Iteration 7
+- Added a decision queue feed in the Decision Studio and wired it to a new `briefing_room.decision_calls` table.
+- Shipped a new Vercel API endpoint for decision calls plus a client-side renderer with sync status messaging.
+- Seeded the production database with initial decision call records using the shared briefing schema.

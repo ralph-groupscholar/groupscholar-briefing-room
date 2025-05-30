@@ -387,59 +387,39 @@
           </div>
           <button class="primary">Draft exec summary</button>
         </div>
-        <div class="studio-grid">
-          <article class="studio-card highlight">
-            <span class="studio-label">Priority call</span>
-            <h3>Re-sequence verification to unblock 18 scholars</h3>
-            <p>
-              Move cohort 4 into an accelerated review lane and assign two
-              temporary reviewers to clear the backlog in 72 hours.
-            </p>
-            <div class="studio-meta">
-              <span>Owner: Program ops</span>
-              <span>Decision by: Feb 8</span>
-            </div>
-          </article>
-          <article class="studio-card">
-            <span class="studio-label">Enablement lane</span>
-            <h3>Launch timeline clarity kit for applicants</h3>
-            <p>
-              Ship a portal banner + FAQ update to explain verification timing
-              and cut "when will I hear back?" tickets by 35%.
-            </p>
-            <div class="studio-meta">
-              <span>Owner: Scholar success</span>
-              <span>Ship by: Feb 11</span>
-            </div>
-          </article>
-          <article class="studio-card">
-            <span class="studio-label">Partner readiness</span>
-            <h3>Package three impact vignettes for renewals</h3>
-            <p>
-              Lock visuals, quotes, and data points for Northwind Trust before
-              the renewal call to boost confidence.
-            </p>
-            <div class="studio-meta">
-              <span>Owner: Partnerships</span>
-              <span>Review: Feb 13</span>
-            </div>
+        <div class="decision-status">
+          <div>
+            <span>Decision queue</span>
+            <strong id="decision-status">Loading queue...</strong>
+            <em id="decision-updated">Awaiting sync</em>
+          </div>
+          <div class="decision-tags">
+            <span>Sorted by decision date</span>
+            <span>Owners auto-assigned</span>
+          </div>
+        </div>
+        <div class="decision-grid" id="decision-grid">
+          <article class="decision-card">
+            <span class="decision-label">Syncing</span>
+            <h3>Pulling active decisions</h3>
+            <p>Stand by while we fetch the latest leadership queue.</p>
           </article>
         </div>
         <div class="studio-lane">
           <div>
             <span>Decision confidence</span>
-            <strong>High</strong>
-            <p>9/12 signals verified this week</p>
+            <strong id="decision-confidence">--</strong>
+            <p id="decision-confidence-detail">Awaiting sync</p>
           </div>
           <div>
             <span>Coverage gaps</span>
-            <strong>2</strong>
-            <p>Need reviewer feedback + funder pulse</p>
+            <strong id="decision-gaps">--</strong>
+            <p id="decision-gaps-detail">Needs owner confirmation</p>
           </div>
           <div>
             <span>Escalations</span>
-            <strong>1</strong>
-            <p>Legal review on ambassador incentives</p>
+            <strong id="decision-escalations">--</strong>
+            <p id="decision-escalations-detail">Sync pending</p>
           </div>
         </div>
       </section>
@@ -639,6 +619,19 @@
       const summaryDue = document.getElementById("summary-due");
       const summaryOverdue = document.getElementById("summary-overdue");
       const summaryOwners = document.getElementById("summary-owners");
+      const decisionGrid = document.getElementById("decision-grid");
+      const decisionStatus = document.getElementById("decision-status");
+      const decisionUpdated = document.getElementById("decision-updated");
+      const decisionConfidence = document.getElementById("decision-confidence");
+      const decisionConfidenceDetail = document.getElementById(
+        "decision-confidence-detail"
+      );
+      const decisionGaps = document.getElementById("decision-gaps");
+      const decisionGapsDetail = document.getElementById("decision-gaps-detail");
+      const decisionEscalations = document.getElementById("decision-escalations");
+      const decisionEscalationsDetail = document.getElementById(
+        "decision-escalations-detail"
+      );
 
       const formatDate = (value) => {
         if (!value) return "TBD";
@@ -717,6 +710,66 @@
         });
       };
 
+      const renderDecisions = (decisions = []) => {
+        decisionGrid.innerHTML = "";
+
+        if (!decisions.length) {
+          decisionGrid.innerHTML = `
+            <article class="decision-card">
+              <span class="decision-label">Quiet week</span>
+              <h3>No decisions queued</h3>
+              <p>Decision requests will appear here as soon as they are logged.</p>
+            </article>
+          `;
+          return;
+        }
+
+        decisions.forEach((decision, index) => {
+          const card = document.createElement("article");
+          card.className = `decision-card${index === 0 ? " highlight" : ""}`;
+          card.innerHTML = `
+            <span class="decision-label">${decision.category || "Queued"}</span>
+            <h3>${decision.title}</h3>
+            <p>${decision.summary}</p>
+            <div class="decision-meta">
+              <span>Owner: ${decision.owner}</span>
+              <span>Decision by: ${formatDate(decision.decision_by)}</span>
+              <span>Confidence: ${decision.confidence}%</span>
+            </div>
+          `;
+          decisionGrid.appendChild(card);
+        });
+      };
+
+      const renderDecisionMetrics = (metrics = {}) => {
+        const avgConfidence = metrics.avg_confidence;
+        const confidenceLabel =
+          avgConfidence == null
+            ? "--"
+            : `${avgConfidence}% ${
+                avgConfidence >= 80
+                  ? "High"
+                  : avgConfidence >= 65
+                    ? "Medium"
+                    : "Low"
+              }`;
+
+        decisionConfidence.textContent = confidenceLabel;
+        decisionConfidenceDetail.textContent =
+          metrics.total != null
+            ? `${metrics.total} decisions tracked`
+            : "Awaiting sync";
+        decisionGaps.textContent = metrics.coverage_gaps ?? "--";
+        decisionGapsDetail.textContent =
+          metrics.coverage_gaps != null
+            ? "Needs reviewer + funder confirmation"
+            : "Needs owner confirmation";
+        decisionEscalations.textContent = metrics.escalations ?? "--";
+        decisionEscalationsDetail.textContent = metrics.latest_decision_at
+          ? `Latest update ${formatSyncTime(metrics.latest_decision_at)}`
+          : "Sync pending";
+      };
+
       const loadSignals = async () => {
         try {
           const response = await fetch("/api/briefing-signals");
@@ -756,8 +809,41 @@
         }
       };
 
+      const loadDecisions = async () => {
+        try {
+          const response = await fetch("/api/briefing-decisions");
+          if (!response.ok) throw new Error("Failed to load decisions");
+          const payload = await response.json();
+          renderDecisions(payload.decisions || []);
+          renderDecisionMetrics(payload.metrics || {});
+          decisionStatus.textContent = payload.decisions?.length
+            ? `${payload.decisions.length} decisions queued`
+            : "No decisions queued";
+          decisionUpdated.textContent = payload.updatedAt
+            ? `Sync ${formatSyncTime(payload.updatedAt)}`
+            : "Sync time unknown";
+        } catch (error) {
+          decisionGrid.innerHTML = `
+            <article class="decision-card">
+              <span class="decision-label">Offline</span>
+              <h3>Decision queue unavailable</h3>
+              <p>We couldn't reach the decision feed. Try again soon.</p>
+            </article>
+          `;
+          decisionStatus.textContent = "Queue unavailable";
+          decisionUpdated.textContent = "Sync failed";
+          decisionConfidence.textContent = "--";
+          decisionConfidenceDetail.textContent = "Sync failed";
+          decisionGaps.textContent = "--";
+          decisionGapsDetail.textContent = "Coverage data unavailable";
+          decisionEscalations.textContent = "--";
+          decisionEscalationsDetail.textContent = "Sync failed";
+        }
+      };
+
       loadSignals();
       loadSummary();
+      loadDecisions();
     </script>
   </body>
 </html>

@@ -680,13 +680,62 @@ main {
   margin-top: 8px;
 }
 
-.studio-grid {
+.decision-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 18px 22px;
+  border-radius: 20px;
+  box-shadow: 0 16px 30px rgba(15, 18, 23, 0.12);
+}
+
+.decision-status span {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  color: rgba(15, 18, 23, 0.55);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.decision-status strong {
+  font-size: 1.2rem;
+}
+
+.decision-status em {
+  display: block;
+  font-size: 0.85rem;
+  color: rgba(15, 18, 23, 0.6);
+  margin-top: 4px;
+}
+
+.decision-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: rgba(15, 18, 23, 0.7);
+  font-size: 0.85rem;
+}
+
+.decision-tags span {
+  text-transform: none;
+  letter-spacing: normal;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(15, 18, 23, 0.08);
+  margin-bottom: 0;
+}
+
+.decision-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
 }
 
-.studio-card {
+.decision-card {
   background: rgba(255, 255, 255, 0.82);
   padding: 22px;
   border-radius: 22px;
@@ -695,24 +744,24 @@ main {
   gap: 12px;
 }
 
-.studio-card h3 {
+.decision-card h3 {
   font-family: "Fraunces", "Times New Roman", serif;
   font-size: 1.25rem;
 }
 
-.studio-label {
+.decision-label {
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-size: 0.7rem;
   color: rgba(15, 18, 23, 0.6);
 }
 
-.studio-card p {
+.decision-card p {
   color: rgba(15, 18, 23, 0.75);
   line-height: 1.5;
 }
 
-.studio-meta {
+.decision-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -720,7 +769,7 @@ main {
   color: rgba(15, 18, 23, 0.6);
 }
 
-.studio-card.highlight {
+.decision-card.highlight {
   background: linear-gradient(140deg, rgba(105, 213, 177, 0.2), rgba(241, 126, 102, 0.2));
 }
 

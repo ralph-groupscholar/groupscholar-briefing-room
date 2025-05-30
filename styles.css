@@ -329,6 +329,12 @@ main {
   margin-bottom: 60px;
 }
 
+.signal-summary {
+  display: grid;
+  gap: 24px;
+  margin-bottom: 60px;
+}
+
 .signal-header {
   display: flex;
   justify-content: space-between;
@@ -398,6 +404,133 @@ main {
   gap: 12px;
   font-size: 0.85rem;
   color: rgba(15, 18, 23, 0.6);
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.summary-header p {
+  max-width: 520px;
+  color: rgba(15, 18, 23, 0.7);
+  margin-top: 8px;
+}
+
+.summary-status {
+  background: var(--night);
+  color: var(--cream);
+  padding: 16px 20px;
+  border-radius: 18px;
+  display: grid;
+  gap: 6px;
+  text-align: right;
+  box-shadow: 0 16px 30px rgba(18, 23, 36, 0.3);
+}
+
+.summary-status span {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.summary-status em {
+  font-style: normal;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.summary-card {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 22px;
+  border-radius: 22px;
+  box-shadow: 0 18px 32px rgba(15, 18, 23, 0.12);
+  display: grid;
+  gap: 12px;
+}
+
+.summary-card.highlight {
+  background: linear-gradient(140deg, rgba(241, 126, 102, 0.9), rgba(105, 213, 177, 0.85));
+  color: var(--cream);
+}
+
+.summary-label {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.65rem;
+  color: rgba(15, 18, 23, 0.6);
+}
+
+.summary-card.highlight .summary-label {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.summary-card h3 {
+  font-family: "Fraunces", "Times New Roman", serif;
+  font-size: 1.8rem;
+}
+
+.summary-card p {
+  color: rgba(15, 18, 23, 0.7);
+}
+
+.summary-card.highlight p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.summary-pill-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(60px, 1fr));
+  gap: 12px;
+}
+
+.summary-pill-row div {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: grid;
+  gap: 4px;
+}
+
+.summary-pill-row strong {
+  font-size: 1.35rem;
+}
+
+.summary-pill-row span {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.summary-owners {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.summary-owners li {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 0.9rem;
+}
+
+.summary-owners strong {
+  font-size: 1.1rem;
+  min-width: 24px;
+}
+
+.summary-owners span {
+  color: rgba(15, 18, 23, 0.7);
 }
 
 .brief-pack {
@@ -971,6 +1104,15 @@ main {
   }
 
   .signal-status {
+    text-align: left;
+    width: 100%;
+  }
+
+  .summary-header {
+    align-items: flex-start;
+  }
+
+  .summary-status {
     text-align: left;
     width: 100%;
   }

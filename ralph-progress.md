@@ -35,3 +35,8 @@
 - Added a Live Ops Signals section that pulls updates from the briefing database into the brief.
 - Implemented a Vercel serverless API with Postgres connectivity and seeded the production table with initial signals.
 - Deployment attempt hit the Vercel daily limit; retry after February 9, 2026 to refresh https://groupscholar-briefing-room.vercel.app.
+
+## Iteration 6
+- Styled the Signal Coverage dashboard with a distinct summary grid, urgency mix tiles, and owner list layout.
+- Wired the coverage module to surface the latest signal timestamp and sync time in the UI.
+- Attempted to redeploy (blocked by the Vercel free-tier deployment limit).

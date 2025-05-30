@@ -632,6 +632,7 @@
       const summaryCoverage = document.getElementById("summary-coverage");
       const summaryUpdated = document.getElementById("summary-updated");
       const summaryTotal = document.getElementById("summary-total");
+      const summaryWindow = document.getElementById("summary-window");
       const summaryHigh = document.getElementById("summary-high");
       const summaryMedium = document.getElementById("summary-medium");
       const summaryLow = document.getElementById("summary-low");
@@ -695,9 +696,13 @@
             ? `${summary.total} signals tracked`
             : "Coverage unavailable";
 
-        summaryUpdated.textContent = summary.latest_signal_at
+        summaryWindow.textContent = summary.latest_signal_at
           ? `Latest signal ${formatSyncTime(summary.latest_signal_at)}`
-          : "Latest signal unknown";
+          : "Tracked for this briefing cycle.";
+
+        summaryUpdated.textContent = payload.updatedAt
+          ? `Sync ${formatSyncTime(payload.updatedAt)}`
+          : "Sync time unknown";
 
         summaryOwners.innerHTML = "";
         if (!owners.length) {
@@ -741,6 +746,7 @@
           summaryCoverage.textContent = "Coverage unavailable";
           summaryUpdated.textContent = "Sync failed";
           summaryTotal.textContent = "--";
+          summaryWindow.textContent = "Tracked for this briefing cycle.";
           summaryHigh.textContent = "--";
           summaryMedium.textContent = "--";
           summaryLow.textContent = "--";

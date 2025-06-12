@@ -45,3 +45,8 @@
 - Added a decision queue feed in the Decision Studio and wired it to a new `briefing_room.decision_calls` table.
 - Shipped a new Vercel API endpoint for decision calls plus a client-side renderer with sync status messaging.
 - Seeded the production database with initial decision call records using the shared briefing schema.
+
+## Iteration 8
+- Added a Field Notes live feed backed by the production briefing database, including a new API endpoint and dynamic pulse stats.
+- Created the `briefing_room.field_notes` table with seeded signals and refreshed the seeding script to handle schema drift safely.
+- Updated the Field Notes UI to render live notes, spotlight cards, and offline fallbacks.

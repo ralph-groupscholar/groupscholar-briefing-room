@@ -179,44 +179,24 @@
               experiments, and stakeholder commitments.
             </p>
           </div>
-          <button class="ghost">Open decision log</button>
+          <div class="insights-status">
+            <div class="insights-sync">
+              <span>Focus feed</span>
+              <strong id="focus-status">Loading focus...</strong>
+              <em id="focus-updated">Awaiting sync</em>
+            </div>
+            <div class="insights-tags">
+              <span id="focus-risk">Risks --</span>
+              <span id="focus-experiment">Experiments --</span>
+              <span id="focus-commitment">Commitments --</span>
+            </div>
+          </div>
         </div>
-        <div class="insights-grid">
+        <div class="insights-grid" id="focus-grid">
           <article class="insight-card">
-            <span class="insight-title">Risks & blockers</span>
-            <h3>Verification backlog in Cohort 4</h3>
-            <p>
-              18 scholars are stuck at verification due to missing guardian
-              documents. Need outreach support by Tuesday.
-            </p>
-            <div class="insight-meta">
-              <span>Owner: Support pod</span>
-              <span>Due: Feb 10</span>
-            </div>
-          </article>
-          <article class="insight-card accent">
-            <span class="insight-title">Growth experiments</span>
-            <h3>Peer ambassador referral sprint</h3>
-            <p>
-              Launch a 10-day ambassador challenge to lift referral conversions
-              by 8%. Pilot in Atlanta + Chicago.
-            </p>
-            <div class="insight-meta">
-              <span>Owner: Growth</span>
-              <span>Start: Feb 12</span>
-            </div>
-          </article>
-          <article class="insight-card">
-            <span class="insight-title">Partner commitments</span>
-            <h3>Impact story drops for renewals</h3>
-            <p>
-              Draft three scholar spotlights for Northwind Trust before the
-              renewal call. Needs media approvals.
-            </p>
-            <div class="insight-meta">
-              <span>Owner: Partnerships</span>
-              <span>Due: Feb 14</span>
-            </div>
+            <span class="insight-title">Syncing focus</span>
+            <h3>Pulling the focus board</h3>
+            <p>Stand by while we fetch the latest risks and commitments.</p>
           </article>
         </div>
       </section>
@@ -436,61 +416,22 @@
           <div class="note-pulse">
             <div>
               <span>Listening posts live</span>
-              <strong>6</strong>
+              <strong id="field-notes-posts">--</strong>
             </div>
             <div>
               <span>Top signal</span>
-              <strong>Timing clarity</strong>
+              <strong id="field-notes-top">Syncing</strong>
             </div>
           </div>
         </div>
-        <div class="notes-grid">
-          <article class="note-card spotlight">
-            <span class="note-label">Scholar voice</span>
-            <h3>"The match timeline still feels mysterious."</h3>
-            <p>
-              Launch a transparent timeline card inside the applicant portal to
-              reduce support tickets and build trust during verification.
-            </p>
-            <div class="note-meta">
-              <span>Source: 14 interviews</span>
-              <span>Owner: Scholar success</span>
-            </div>
-          </article>
+        <div class="notes-grid" id="field-notes-grid">
           <article class="note-card">
-            <span class="note-label">Reviewer sentiment</span>
-            <h3>Calibration gaps after Round 2</h3>
-            <p>
-              Two reviewers are scoring 22% higher than the median. Schedule a
-              30-minute anchor review before Friday.
-            </p>
+            <span class="note-label">Syncing</span>
+            <h3>Field notes loading</h3>
+            <p>Pulling the latest scholar voice, reviewer sentiment, and partner cues.</p>
             <div class="note-meta">
-              <span>Source: rubric audit</span>
-              <span>Owner: Program ops</span>
-            </div>
-          </article>
-          <article class="note-card">
-            <span class="note-label">Partner whisper</span>
-            <h3>Renewal hinge on impact storytelling</h3>
-            <p>
-              Partners want the story arc earlier in the brief. Add a 3-line
-              impact vignette to the exec recap.
-            </p>
-            <div class="note-meta">
-              <span>Source: partner syncs</span>
-              <span>Owner: Partnerships</span>
-            </div>
-          </article>
-          <article class="note-card">
-            <span class="note-label">Momentum cue</span>
-            <h3>Campus ambassadors want clearer asks</h3>
-            <p>
-              Provide a one-page playbook with social copy, event timings, and
-              incentive FAQ by midweek.
-            </p>
-            <div class="note-meta">
-              <span>Source: ambassador check-in</span>
-              <span>Owner: Growth</span>
+              <span>Source: briefing feed</span>
+              <span>Owner: Briefing room</span>
             </div>
           </article>
         </div>
@@ -632,6 +573,9 @@
       const decisionEscalationsDetail = document.getElementById(
         "decision-escalations-detail"
       );
+      const fieldNotesGrid = document.getElementById("field-notes-grid");
+      const fieldNotesPosts = document.getElementById("field-notes-posts");
+      const fieldNotesTop = document.getElementById("field-notes-top");
 
       const formatDate = (value) => {
         if (!value) return "TBD";
@@ -728,46 +672,75 @@
           const card = document.createElement("article");
           card.className = `decision-card${index === 0 ? " highlight" : ""}`;
           card.innerHTML = `
-            <span class="decision-label">${decision.category || "Queued"}</span>
+            <span class="decision-label">${decision.lane || "Queued"}</span>
             <h3>${decision.title}</h3>
             <p>${decision.summary}</p>
             <div class="decision-meta">
               <span>Owner: ${decision.owner}</span>
               <span>Decision by: ${formatDate(decision.decision_by)}</span>
-              <span>Confidence: ${decision.confidence}%</span>
+              <span>Confidence: ${decision.confidence || "TBD"}</span>
             </div>
           `;
           decisionGrid.appendChild(card);
         });
       };
 
-      const renderDecisionMetrics = (metrics = {}) => {
-        const avgConfidence = metrics.avg_confidence;
-        const confidenceLabel =
-          avgConfidence == null
-            ? "--"
-            : `${avgConfidence}% ${
-                avgConfidence >= 80
-                  ? "High"
-                  : avgConfidence >= 65
-                    ? "Medium"
-                    : "Low"
-              }`;
+      const renderDecisionMetrics = (metrics = []) => {
+        if (!metrics.length) {
+          return;
+        }
+        const ordered = metrics.slice(0, 3);
+        if (ordered[0]) {
+          decisionConfidence.textContent = ordered[0].value;
+          decisionConfidenceDetail.textContent = ordered[0].detail;
+        }
+        if (ordered[1]) {
+          decisionGaps.textContent = ordered[1].value;
+          decisionGapsDetail.textContent = ordered[1].detail;
+        }
+        if (ordered[2]) {
+          decisionEscalations.textContent = ordered[2].value;
+          decisionEscalationsDetail.textContent = ordered[2].detail;
+        }
+      };
 
-        decisionConfidence.textContent = confidenceLabel;
-        decisionConfidenceDetail.textContent =
-          metrics.total != null
-            ? `${metrics.total} decisions tracked`
-            : "Awaiting sync";
-        decisionGaps.textContent = metrics.coverage_gaps ?? "--";
-        decisionGapsDetail.textContent =
-          metrics.coverage_gaps != null
-            ? "Needs reviewer + funder confirmation"
-            : "Needs owner confirmation";
-        decisionEscalations.textContent = metrics.escalations ?? "--";
-        decisionEscalationsDetail.textContent = metrics.latest_decision_at
-          ? `Latest update ${formatSyncTime(metrics.latest_decision_at)}`
-          : "Sync pending";
+      const renderFieldNotes = (payload) => {
+        const notes = payload.notes || [];
+        const pulse = payload.pulse || {};
+
+        fieldNotesPosts.textContent = pulse.listening_posts ?? "--";
+        fieldNotesTop.textContent = pulse.top_signal || "No signal";
+
+        fieldNotesGrid.innerHTML = "";
+        if (!notes.length) {
+          fieldNotesGrid.innerHTML = `
+            <article class="note-card">
+              <span class="note-label">Quiet scan</span>
+              <h3>No new field notes</h3>
+              <p>Listening posts are open. New signals will appear as soon as they land.</p>
+              <div class="note-meta">
+                <span>Source: briefing feed</span>
+                <span>Owner: Briefing room</span>
+              </div>
+            </article>
+          `;
+          return;
+        }
+
+        notes.forEach((note) => {
+          const card = document.createElement("article");
+          card.className = `note-card${note.spotlight ? " spotlight" : ""}`;
+          card.innerHTML = `
+            <span class="note-label">${note.category || "Field signal"}</span>
+            <h3>${note.headline}</h3>
+            <p>${note.summary}</p>
+            <div class="note-meta">
+              <span>Source: ${note.source}</span>
+              <span>Owner: ${note.owner}</span>
+            </div>
+          `;
+          fieldNotesGrid.appendChild(card);
+        });
       };
 
       const loadSignals = async () => {
@@ -814,10 +787,10 @@
           const response = await fetch("/api/briefing-decisions");
           if (!response.ok) throw new Error("Failed to load decisions");
           const payload = await response.json();
-          renderDecisions(payload.decisions || []);
+          renderDecisions(payload.calls || []);
           renderDecisionMetrics(payload.metrics || {});
-          decisionStatus.textContent = payload.decisions?.length
-            ? `${payload.decisions.length} decisions queued`
+          decisionStatus.textContent = payload.calls?.length
+            ? `${payload.calls.length} decisions queued`
             : "No decisions queued";
           decisionUpdated.textContent = payload.updatedAt
             ? `Sync ${formatSyncTime(payload.updatedAt)}`
@@ -841,9 +814,33 @@
         }
       };
 
+      const loadFieldNotes = async () => {
+        try {
+          const response = await fetch("/api/briefing-field-notes");
+          if (!response.ok) throw new Error("Failed to load field notes");
+          const payload = await response.json();
+          renderFieldNotes(payload);
+        } catch (error) {
+          fieldNotesPosts.textContent = "--";
+          fieldNotesTop.textContent = "Sync failed";
+          fieldNotesGrid.innerHTML = `
+            <article class="note-card">
+              <span class="note-label">Offline</span>
+              <h3>Field notes unavailable</h3>
+              <p>We couldn't reach the field signal feed. Try again soon.</p>
+              <div class="note-meta">
+                <span>Source: briefing feed</span>
+                <span>Owner: Briefing room</span>
+              </div>
+            </article>
+          `;
+        }
+      };
+
       loadSignals();
       loadSummary();
       loadDecisions();
+      loadFieldNotes();
     </script>
   </body>
 </html>

@@ -277,6 +277,72 @@
         </div>
       </section>
 
+      <section class="momentum-radar">
+        <div class="momentum-header">
+          <div>
+            <h2>Momentum radar</h2>
+            <p>
+              Track what is accelerating, stalling, or holding steady across the
+              scholarship engine with a live readout from the briefing database.
+            </p>
+          </div>
+          <div class="momentum-status">
+            <span>Momentum sync</span>
+            <strong id="momentum-status">Loading momentum...</strong>
+            <em id="momentum-updated">Awaiting sync</em>
+          </div>
+        </div>
+        <div class="momentum-tags">
+          <span id="momentum-up">Up --</span>
+          <span id="momentum-down">Down --</span>
+          <span id="momentum-flat">Flat --</span>
+        </div>
+        <div class="momentum-grid" id="momentum-grid">
+          <article class="momentum-card">
+            <span class="momentum-label">Syncing</span>
+            <h3>Pulling momentum lanes</h3>
+            <p>Stand by while we connect to the latest acceleration signals.</p>
+            <div class="momentum-meta">
+              <span>Owner: Briefing room</span>
+              <span>Metric: --</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="highlight-board">
+        <div class="highlight-header">
+          <div>
+            <h2>Executive highlights</h2>
+            <p>
+              Condense the week's wins, risks, and watchlist cues into a leadership
+              snapshot pulled directly from the briefing database.
+            </p>
+          </div>
+          <div class="highlight-status">
+            <span>Highlight sync</span>
+            <strong id="highlight-status">Loading highlights...</strong>
+            <em id="highlight-updated">Awaiting sync</em>
+          </div>
+        </div>
+        <div class="highlight-tags">
+          <span id="highlight-win">Wins --</span>
+          <span id="highlight-risk">Risks --</span>
+          <span id="highlight-watch">Watch --</span>
+        </div>
+        <div class="highlight-grid" id="highlight-grid">
+          <article class="highlight-card">
+            <span class="highlight-label">Syncing</span>
+            <h3>Pulling executive highlights</h3>
+            <p>Stand by while we connect to the latest wins, risks, and watchlist items.</p>
+            <div class="highlight-meta">
+              <span>Owner: Briefing room</span>
+              <span>Impact: --</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section class="brief-pack">
         <div class="pack-header">
           <div>
@@ -401,6 +467,184 @@
             <strong id="decision-escalations">--</strong>
             <p id="decision-escalations-detail">Sync pending</p>
           </div>
+        </div>
+      </section>
+
+      <section class="escalation-watch">
+        <div class="escalation-header">
+          <div>
+            <h2>Escalation watch</h2>
+            <p>
+              Keep leadership focused on the most urgent blockers, risks, and
+              compliance items that need fast resolution.
+            </p>
+          </div>
+          <div class="escalation-status">
+            <span>Escalation sync</span>
+            <strong id="escalation-status">Loading escalations...</strong>
+            <em id="escalation-updated">Awaiting sync</em>
+          </div>
+        </div>
+        <div class="escalation-tags">
+          <span id="escalation-open">Open --</span>
+          <span id="escalation-pending">Pending --</span>
+          <span id="escalation-resolved">Resolved --</span>
+        </div>
+        <div class="escalation-grid" id="escalation-grid">
+          <article class="escalation-card">
+            <span class="escalation-label">Syncing</span>
+            <h3>Pulling escalation queue</h3>
+            <p>Stand by while we fetch the latest leadership blockers.</p>
+            <div class="escalation-meta">
+              <span>Owner: Briefing room</span>
+              <span>ETA: --</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="action-docket">
+        <div class="action-header">
+          <div>
+            <h2>Action docket</h2>
+            <p>
+              The execution queue behind the brief: who owns the next moves,
+              what is blocked, and what needs to ship before Friday.
+            </p>
+          </div>
+          <div class="action-status">
+            <span>Action queue</span>
+            <strong id="action-status">Loading actions...</strong>
+            <em id="action-updated">Awaiting sync</em>
+          </div>
+        </div>
+        <div class="action-tags">
+          <span id="action-total">-- actions</span>
+          <span id="action-due">-- due soon</span>
+          <span id="action-blocked">-- blocked</span>
+          <span id="action-overdue">-- overdue</span>
+        </div>
+        <div class="action-grid" id="action-grid">
+          <article class="action-card">
+            <span class="action-label">Syncing</span>
+            <h3>Pulling action docket</h3>
+            <p>Stand by while we connect to the execution queue.</p>
+            <div class="action-meta">
+              <span>Owner: Briefing room</span>
+              <span>Due: --</span>
+              <span>Priority: --</span>
+              <span>Lane: --</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="resource-requests">
+        <div class="resource-header">
+          <div>
+            <h2>Resource requests</h2>
+            <p>
+              A live intake of staffing, product, data, and finance asks that
+              need resourcing decisions before the brief goes out.
+            </p>
+          </div>
+          <div class="resource-status">
+            <span>Resource sync</span>
+            <strong id="resource-status">Loading requests...</strong>
+            <em id="resource-updated">Awaiting sync</em>
+          </div>
+        </div>
+        <div class="resource-tags">
+          <span id="resource-total">-- requests</span>
+          <span id="resource-pending">Pending --</span>
+          <span id="resource-approved">Approved --</span>
+          <span id="resource-due">Due soon --</span>
+        </div>
+        <div class="resource-grid" id="resource-grid">
+          <article class="resource-card">
+            <span class="resource-label">Syncing</span>
+            <h3>Pulling resource requests</h3>
+            <p>Briefing room is connecting to the resource intake feed.</p>
+            <div class="resource-meta">
+              <span>Owner: Briefing room</span>
+              <span>Needed by: --</span>
+              <span>Status: --</span>
+              <span>Priority: --</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="support-pulse">
+        <div class="support-header">
+          <div>
+            <h2>Scholar support pulse</h2>
+            <p>
+              Live queue health for scholar support: where tickets are piling up,
+              SLA risk, and the lanes that need immediate coverage.
+            </p>
+          </div>
+          <div class="support-status">
+            <span>Support sync</span>
+            <strong id="support-status">Loading support...</strong>
+            <em id="support-updated">Awaiting sync</em>
+          </div>
+        </div>
+        <div class="support-tags">
+          <span id="support-total">-- lanes</span>
+          <span id="support-open">-- open tickets</span>
+          <span id="support-at-risk">At risk --</span>
+          <span id="support-breached">Breached --</span>
+          <span id="support-sla">Avg SLA --h</span>
+        </div>
+        <div class="support-grid" id="support-grid">
+          <article class="support-card">
+            <span class="support-label">Syncing</span>
+            <h3>Pulling support queues</h3>
+            <p>Stand by while we fetch the latest scholar support lanes.</p>
+            <div class="support-meta">
+              <span>Category: --</span>
+              <span>Owner: Briefing room</span>
+              <span>Open: --</span>
+              <span>SLA: --</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="partner-readiness">
+        <div class="partner-header">
+          <div>
+            <h2>Partner readiness pulse</h2>
+            <p>
+              Track renewal momentum, readiness scores, and high-risk partners
+              before the leadership brief goes out.
+            </p>
+          </div>
+          <button class="secondary">Open renewal tracker</button>
+        </div>
+        <div class="partner-metrics">
+          <div>
+            <span>Active renewals</span>
+            <strong id="partner-active">--</strong>
+            <em id="partner-updated">Awaiting sync</em>
+          </div>
+          <div class="partner-tags">
+            <span id="partner-average">Avg readiness --</span>
+            <span id="partner-high-risk">High risk --</span>
+            <span id="partner-upcoming">Renewals due --</span>
+          </div>
+        </div>
+        <div class="partner-grid" id="partner-grid">
+          <article class="partner-card">
+            <span class="partner-label">Syncing</span>
+            <h3>Pulling partner updates</h3>
+            <p>Briefing room is fetching the latest renewal readiness.</p>
+            <div class="partner-meta">
+              <span>Owner: Briefing room</span>
+              <span>Next step: --</span>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -560,6 +804,24 @@
       const summaryDue = document.getElementById("summary-due");
       const summaryOverdue = document.getElementById("summary-overdue");
       const summaryOwners = document.getElementById("summary-owners");
+      const momentumGrid = document.getElementById("momentum-grid");
+      const momentumStatus = document.getElementById("momentum-status");
+      const momentumUpdated = document.getElementById("momentum-updated");
+      const momentumUp = document.getElementById("momentum-up");
+      const momentumDown = document.getElementById("momentum-down");
+      const momentumFlat = document.getElementById("momentum-flat");
+      const highlightGrid = document.getElementById("highlight-grid");
+      const highlightStatus = document.getElementById("highlight-status");
+      const highlightUpdated = document.getElementById("highlight-updated");
+      const highlightWin = document.getElementById("highlight-win");
+      const highlightRisk = document.getElementById("highlight-risk");
+      const highlightWatch = document.getElementById("highlight-watch");
+      const focusGrid = document.getElementById("focus-grid");
+      const focusStatus = document.getElementById("focus-status");
+      const focusUpdated = document.getElementById("focus-updated");
+      const focusRisk = document.getElementById("focus-risk");
+      const focusExperiment = document.getElementById("focus-experiment");
+      const focusCommitment = document.getElementById("focus-commitment");
       const decisionGrid = document.getElementById("decision-grid");
       const decisionStatus = document.getElementById("decision-status");
       const decisionUpdated = document.getElementById("decision-updated");
@@ -573,6 +835,40 @@
       const decisionEscalationsDetail = document.getElementById(
         "decision-escalations-detail"
       );
+      const actionGrid = document.getElementById("action-grid");
+      const actionStatus = document.getElementById("action-status");
+      const actionUpdated = document.getElementById("action-updated");
+      const actionTotal = document.getElementById("action-total");
+      const actionDue = document.getElementById("action-due");
+      const actionBlocked = document.getElementById("action-blocked");
+      const actionOverdue = document.getElementById("action-overdue");
+      const resourceGrid = document.getElementById("resource-grid");
+      const resourceStatus = document.getElementById("resource-status");
+      const resourceUpdated = document.getElementById("resource-updated");
+      const resourceTotal = document.getElementById("resource-total");
+      const resourcePending = document.getElementById("resource-pending");
+      const resourceApproved = document.getElementById("resource-approved");
+      const resourceDue = document.getElementById("resource-due");
+      const supportGrid = document.getElementById("support-grid");
+      const supportStatus = document.getElementById("support-status");
+      const supportUpdated = document.getElementById("support-updated");
+      const supportTotal = document.getElementById("support-total");
+      const supportOpen = document.getElementById("support-open");
+      const supportAtRisk = document.getElementById("support-at-risk");
+      const supportBreached = document.getElementById("support-breached");
+      const supportSla = document.getElementById("support-sla");
+      const escalationGrid = document.getElementById("escalation-grid");
+      const escalationStatus = document.getElementById("escalation-status");
+      const escalationUpdated = document.getElementById("escalation-updated");
+      const escalationOpen = document.getElementById("escalation-open");
+      const escalationPending = document.getElementById("escalation-pending");
+      const escalationResolved = document.getElementById("escalation-resolved");
+      const partnerGrid = document.getElementById("partner-grid");
+      const partnerActive = document.getElementById("partner-active");
+      const partnerUpdated = document.getElementById("partner-updated");
+      const partnerAverage = document.getElementById("partner-average");
+      const partnerHighRisk = document.getElementById("partner-high-risk");
+      const partnerUpcoming = document.getElementById("partner-upcoming");
       const fieldNotesGrid = document.getElementById("field-notes-grid");
       const fieldNotesPosts = document.getElementById("field-notes-posts");
       const fieldNotesTop = document.getElementById("field-notes-top");
@@ -597,6 +893,14 @@
         });
       };
 
+      const normalizeText = (value) =>
+        value ? value.toString().trim().toLowerCase() : "";
+
+      const formatPriority = (value) => {
+        if (value == null) return "P-";
+        return `P${value}`;
+      };
+
       const renderSignals = (signals) => {
         signalGrid.innerHTML = "";
 
@@ -615,6 +919,80 @@
           `;
           signalGrid.appendChild(card);
         });
+      };
+
+      const renderFocus = (items = []) => {
+        focusGrid.innerHTML = "";
+
+        if (!items.length) {
+          focusGrid.innerHTML = `
+            <article class="insight-card">
+              <span class="insight-title">Focus clear</span>
+              <h3>No focus items queued</h3>
+              <p>New risks and commitments will appear as they are logged.</p>
+            </article>
+          `;
+          return;
+        }
+
+        const labelMap = {
+          risk: "Risks & blockers",
+          experiment: "Growth experiments",
+          commitment: "Partner commitments"
+        };
+        const accentMap = {
+          experiment: "accent"
+        };
+
+        items.forEach((item) => {
+          const card = document.createElement("article");
+          const focusKey = normalizeText(item.focus_type);
+          const label = labelMap[focusKey] || item.focus_type || "Focus item";
+          const accentClass = accentMap[focusKey] ? ` ${accentMap[focusKey]}` : "";
+          const metaItems = [
+            `Owner: ${item.owner || "TBD"}`,
+            `Due: ${formatDate(item.due_date)}`
+          ];
+          if (item.status) {
+            metaItems.push(`Status: ${item.status}`);
+          }
+
+          card.className = `insight-card${accentClass}`;
+          card.innerHTML = `
+            <span class="insight-title">${label}</span>
+            <h3>${item.title}</h3>
+            <p>${item.summary}</p>
+            <div class="insight-meta">
+              ${metaItems.map((entry) => `<span>${entry}</span>`).join("")}
+            </div>
+          `;
+          focusGrid.appendChild(card);
+        });
+      };
+
+      const renderFocusSummary = (payload) => {
+        const summary = payload.summary || {};
+
+        focusRisk.textContent =
+          summary.risk != null ? `${summary.risk} risks` : "Risks --";
+        focusExperiment.textContent =
+          summary.experiment != null
+            ? `${summary.experiment} experiments`
+            : "Experiments --";
+        focusCommitment.textContent =
+          summary.commitment != null
+            ? `${summary.commitment} commitments`
+            : "Commitments --";
+
+        focusStatus.textContent =
+          summary.total != null
+            ? `${summary.total} focus items`
+            : "Focus feed online";
+        focusUpdated.textContent = summary.latest_focus_at
+          ? `Latest focus ${formatSyncTime(summary.latest_focus_at)}`
+          : payload.updatedAt
+          ? `Sync ${formatSyncTime(payload.updatedAt)}`
+          : "Sync time unknown";
       };
 
       const renderSummary = (payload) => {
@@ -685,23 +1063,326 @@
         });
       };
 
-      const renderDecisionMetrics = (metrics = []) => {
-        if (!metrics.length) {
+      const renderMomentum = (payload) => {
+        const updates = payload.updates || [];
+        const summary = payload.summary || {};
+
+        momentumStatus.textContent =
+          summary.total != null
+            ? `${summary.total} momentum lanes`
+            : "Momentum feed online";
+        momentumUpdated.textContent = summary.latest_update
+          ? `Latest update ${formatSyncTime(summary.latest_update)}`
+          : payload.updatedAt
+          ? `Sync ${formatSyncTime(payload.updatedAt)}`
+          : "Sync time unknown";
+        momentumUp.textContent =
+          summary.up != null ? `Up ${summary.up}` : "Up --";
+        momentumDown.textContent =
+          summary.down != null ? `Down ${summary.down}` : "Down --";
+        momentumFlat.textContent =
+          summary.flat != null ? `Flat ${summary.flat}` : "Flat --";
+
+        momentumGrid.innerHTML = "";
+        if (!updates.length) {
+          momentumGrid.innerHTML = `
+            <article class="momentum-card">
+              <span class="momentum-label">Quiet scan</span>
+              <h3>No momentum updates</h3>
+              <p>New acceleration signals will appear as soon as they land.</p>
+              <div class="momentum-meta">
+                <span>Owner: Briefing room</span>
+                <span>Metric: --</span>
+              </div>
+            </article>
+          `;
           return;
         }
-        const ordered = metrics.slice(0, 3);
-        if (ordered[0]) {
-          decisionConfidence.textContent = ordered[0].value;
-          decisionConfidenceDetail.textContent = ordered[0].detail;
+
+        updates.forEach((update, index) => {
+          const card = document.createElement("article");
+          const trendClass =
+            update.trend && update.trend.toLowerCase() === "down"
+              ? " down"
+              : update.trend && update.trend.toLowerCase() === "flat"
+              ? " flat"
+              : " up";
+          card.className = `momentum-card${index === 0 ? " highlight" : ""}${trendClass}`;
+          card.innerHTML = `
+            <span class="momentum-label">${update.lane || "Momentum"}</span>
+            <h3>${update.headline}</h3>
+            <p>${update.summary}</p>
+            <div class="momentum-meta">
+              <span>Owner: ${update.owner}</span>
+              <span>Metric: ${update.metric}</span>
+              <span>Delta: ${update.delta}</span>
+            </div>
+          `;
+          momentumGrid.appendChild(card);
+        });
+      };
+
+      const renderHighlights = (payload) => {
+        const highlights = payload.highlights || [];
+        const summary = payload.summary || {};
+
+        highlightStatus.textContent =
+          summary.total != null
+            ? `${summary.total} highlights`
+            : "Highlight feed online";
+        highlightUpdated.textContent = summary.latest_update
+          ? `Latest update ${formatSyncTime(summary.latest_update)}`
+          : payload.updatedAt
+          ? `Sync ${formatSyncTime(payload.updatedAt)}`
+          : "Sync time unknown";
+        highlightWin.textContent =
+          summary.wins != null ? `Wins ${summary.wins}` : "Wins --";
+        highlightRisk.textContent =
+          summary.risks != null ? `Risks ${summary.risks}` : "Risks --";
+        highlightWatch.textContent =
+          summary.watch != null ? `Watch ${summary.watch}` : "Watch --";
+
+        highlightGrid.innerHTML = "";
+        if (!highlights.length) {
+          highlightGrid.innerHTML = `
+            <article class="highlight-card">
+              <span class="highlight-label">Quiet scan</span>
+              <h3>No highlights yet</h3>
+              <p>Executive highlights will appear as soon as they are logged.</p>
+              <div class="highlight-meta">
+                <span>Owner: Briefing room</span>
+                <span>Impact: --</span>
+              </div>
+            </article>
+          `;
+          return;
         }
-        if (ordered[1]) {
-          decisionGaps.textContent = ordered[1].value;
-          decisionGapsDetail.textContent = ordered[1].detail;
+
+        highlights.forEach((highlight, index) => {
+          const category = normalizeText(highlight.category);
+          const categoryClass =
+            category === "risk" ? " risk" : category === "watch" ? " watch" : " win";
+          const card = document.createElement("article");
+          card.className = `highlight-card${index === 0 ? " highlight" : ""}${categoryClass}`;
+          card.innerHTML = `
+            <span class="highlight-label">${highlight.category || "Highlight"}</span>
+            <h3>${highlight.headline}</h3>
+            <p>${highlight.summary}</p>
+            <div class="highlight-meta">
+              <span>Owner: ${highlight.owner}</span>
+              <span>Impact: ${highlight.impact || "TBD"}</span>
+              <span>Status: ${highlight.status || "In flight"}</span>
+            </div>
+          `;
+          highlightGrid.appendChild(card);
+        });
+      };
+
+      const renderDecisionMetrics = (metrics = {}) => {
+        if (!metrics || Object.keys(metrics).length === 0) {
+          return;
         }
-        if (ordered[2]) {
-          decisionEscalations.textContent = ordered[2].value;
-          decisionEscalationsDetail.textContent = ordered[2].detail;
+
+        const total = metrics.total ?? 0;
+        const high = metrics.high ?? 0;
+        const medium = metrics.medium ?? 0;
+        const low = metrics.low ?? 0;
+        const gaps = metrics.coverage_gaps ?? 0;
+        const escalations = metrics.escalations ?? 0;
+
+        decisionConfidence.textContent = total
+          ? `${Math.round((high / total) * 100)}% high`
+          : "0% high";
+        decisionConfidenceDetail.textContent = total
+          ? `${high} high / ${medium} medium / ${low} low`
+          : "No confidence ratings yet";
+
+        decisionGaps.textContent = `${gaps} gaps`;
+        decisionGapsDetail.textContent =
+          gaps > 0 ? "Needs owners or decisions" : "Coverage confirmed";
+
+        decisionEscalations.textContent = `${escalations} escalations`;
+        decisionEscalationsDetail.textContent =
+          escalations > 0 ? "Leadership review needed" : "No escalations logged";
+      };
+
+      const renderActions = (payload) => {
+        const actions = payload.actions || [];
+        const summary = payload.summary || {};
+
+        actionStatus.textContent =
+          summary.total != null
+            ? `${summary.total} actions in motion`
+            : "Action feed online";
+        actionUpdated.textContent = summary.latest_action_at
+          ? `Latest action ${formatSyncTime(summary.latest_action_at)}`
+          : payload.updatedAt
+          ? `Sync ${formatSyncTime(payload.updatedAt)}`
+          : "Sync time unknown";
+
+        actionTotal.textContent = `${summary.total ?? "--"} actions`;
+        actionDue.textContent = `${summary.due_soon ?? "--"} due soon`;
+        actionBlocked.textContent = `${summary.blocked ?? "--"} blocked`;
+        actionOverdue.textContent = `${summary.overdue ?? "--"} overdue`;
+
+        actionGrid.innerHTML = "";
+        if (!actions.length) {
+          actionGrid.innerHTML = `
+            <article class="action-card">
+              <span class="action-label">Quiet queue</span>
+              <h3>No actions queued</h3>
+              <p>New execution items will appear here once they are logged.</p>
+              <div class="action-meta">
+                <span>Owner: Briefing room</span>
+                <span>Due: --</span>
+                <span>Priority: --</span>
+                <span>Lane: --</span>
+              </div>
+            </article>
+          `;
+          return;
         }
+
+        actions.forEach((action, index) => {
+          const statusKey = normalizeText(action.status).replace(/\\s+/g, "-");
+          const card = document.createElement("article");
+          card.className = `action-card${index === 0 ? " highlight" : ""}${
+            statusKey ? ` ${statusKey}` : ""
+          }`;
+          card.innerHTML = `
+            <span class="action-label">${action.status || "Queued"}</span>
+            <h3>${action.title}</h3>
+            <p>${action.summary}</p>
+            <div class="action-meta">
+              <span>Owner: ${action.owner}</span>
+              <span>Due: ${formatDate(action.due_date)}</span>
+              <span>Priority: ${action.priority ?? "--"}</span>
+              <span>Lane: ${action.lane || "General"}</span>
+            </div>
+          `;
+          actionGrid.appendChild(card);
+        });
+      };
+
+      const renderResources = (payload) => {
+        const requests = payload.requests || [];
+        const summary = payload.summary || {};
+
+        resourceGrid.innerHTML = "";
+
+        if (!requests.length) {
+          resourceGrid.innerHTML = `
+            <article class="resource-card">
+              <span class="resource-label">Clear slate</span>
+              <h3>No resource requests queued</h3>
+              <p>New staffing and tooling needs will surface here.</p>
+            </article>
+          `;
+        } else {
+          requests.forEach((request) => {
+            const card = document.createElement("article");
+            card.className = "resource-card";
+            card.innerHTML = `
+              <span class="resource-label">${request.request_type}</span>
+              <h3>${request.title}</h3>
+              <p>${request.justification}</p>
+              <div class="resource-meta">
+                <span>Owner: ${request.owner}</span>
+                <span>Needed by: ${formatDate(request.needed_by)}</span>
+                <span>Status: ${request.status}</span>
+                <span>Priority: ${formatPriority(request.priority)}</span>
+              </div>
+              <div class="resource-impact">${request.impact}</div>
+            `;
+            resourceGrid.appendChild(card);
+          });
+        }
+
+        resourceTotal.textContent =
+          summary.total != null ? `${summary.total} requests` : "-- requests";
+        resourcePending.textContent =
+          summary.pending != null ? `Pending ${summary.pending}` : "Pending --";
+        resourceApproved.textContent =
+          summary.approved != null
+            ? `Approved ${summary.approved}`
+            : "Approved --";
+        resourceDue.textContent =
+          summary.due_soon != null
+            ? `Due soon ${summary.due_soon}`
+            : "Due soon --";
+
+        resourceStatus.textContent =
+          summary.total != null
+            ? `${summary.total} active requests`
+            : "Resource feed online";
+        resourceUpdated.textContent = summary.latest_request_at
+          ? `Latest ${formatSyncTime(summary.latest_request_at)}`
+          : payload.updatedAt
+          ? `Sync ${formatSyncTime(payload.updatedAt)}`
+          : "Sync time unknown";
+      };
+
+      const renderEscalations = (payload) => {
+        const items = payload.items || [];
+        const summary = payload.summary || {};
+
+        escalationStatus.textContent =
+          summary.total != null
+            ? `${summary.total} escalations tracked`
+            : "Escalation feed online";
+        escalationUpdated.textContent = summary.latest_update
+          ? `Latest update ${formatSyncTime(summary.latest_update)}`
+          : payload.updatedAt
+          ? `Sync ${formatSyncTime(payload.updatedAt)}`
+          : "Sync time unknown";
+        escalationOpen.textContent =
+          summary.open != null ? `Open ${summary.open}` : "Open --";
+        escalationPending.textContent =
+          summary.pending != null ? `Pending ${summary.pending}` : "Pending --";
+        escalationResolved.textContent =
+          summary.resolved != null ? `Resolved ${summary.resolved}` : "Resolved --";
+
+        escalationGrid.innerHTML = "";
+        if (!items.length) {
+          escalationGrid.innerHTML = `
+            <article class="escalation-card">
+              <span class="escalation-label">Quiet scan</span>
+              <h3>No escalations logged</h3>
+              <p>New blockers will appear as soon as they are reported.</p>
+              <div class="escalation-meta">
+                <span>Owner: Briefing room</span>
+                <span>ETA: --</span>
+              </div>
+            </article>
+          `;
+          return;
+        }
+
+        items.forEach((item, index) => {
+          const card = document.createElement("article");
+          const severityKey = normalizeText(item.severity);
+          const severityClass =
+            severityKey === "critical"
+              ? " critical"
+              : severityKey === "high"
+              ? " high"
+              : severityKey === "moderate"
+              ? " moderate"
+              : "";
+          card.className = `escalation-card${index === 0 ? " highlight" : ""}${severityClass}`;
+          card.innerHTML = `
+            <span class="escalation-label">${item.severity || "Priority"} severity</span>
+            <h3>${item.issue}</h3>
+            <p>${item.impact}</p>
+            <div class="escalation-meta">
+              <span>Category: ${item.category || "General"}</span>
+              <span>Owner: ${item.owner}</span>
+              <span>Status: ${item.status || "Open"}</span>
+              <span>ETA: ${formatDate(item.eta)}</span>
+            </div>
+          `;
+          escalationGrid.appendChild(card);
+        });
       };
 
       const renderFieldNotes = (payload) => {
@@ -743,6 +1424,75 @@
         });
       };
 
+      const renderPartnerUpdates = (payload) => {
+        const updates = payload.updates || [];
+        const metrics = payload.metrics || {};
+
+        partnerActive.textContent = metrics.active ?? updates.length ?? "--";
+        partnerAverage.textContent = `Avg readiness ${metrics.average_readiness ?? "--"}%`;
+        partnerHighRisk.textContent = `High risk ${metrics.high_risk ?? "--"}`;
+        partnerUpcoming.textContent = `Renewals due ${metrics.due_soon ?? "--"} (45d)`;
+        partnerUpdated.textContent = payload.updatedAt
+          ? `Sync ${formatSyncTime(payload.updatedAt)}`
+          : "Sync time unknown";
+
+        partnerGrid.innerHTML = "";
+        if (!updates.length) {
+          partnerGrid.innerHTML = `
+            <article class="partner-card">
+              <span class="partner-label">Quiet week</span>
+              <h3>No partner updates</h3>
+              <p>Renewal readiness will appear here once it is logged.</p>
+              <div class="partner-meta">
+                <span>Owner: Partnerships</span>
+                <span>Next step: Review renewal calendar</span>
+              </div>
+            </article>
+          `;
+          return;
+        }
+
+        updates.forEach((update, index) => {
+          const card = document.createElement("article");
+          card.className = `partner-card${index === 0 ? " highlight" : ""}`;
+          card.innerHTML = `
+            <span class="partner-label">${update.status || "In flight"}</span>
+            <h3>${update.partner_name}</h3>
+            <p>${update.summary}</p>
+            <div class="partner-meta">
+              <span>Readiness: ${update.readiness_score ?? "--"}%</span>
+              <span>Renewal: ${formatDate(update.renewal_date)}</span>
+              <span>Owner: ${update.owner}</span>
+              <span>Next: ${update.next_step}</span>
+            </div>
+          `;
+          partnerGrid.appendChild(card);
+        });
+      };
+
+      const loadFocus = async () => {
+        try {
+          const response = await fetch("/api/briefing-focus");
+          if (!response.ok) throw new Error("Failed to load focus");
+          const payload = await response.json();
+          renderFocus(payload.focus || []);
+          renderFocusSummary(payload);
+        } catch (error) {
+          focusGrid.innerHTML = `
+            <article class="insight-card">
+              <span class="insight-title">Offline</span>
+              <h3>Focus board unavailable</h3>
+              <p>We couldn't reach the focus feed. Try again soon.</p>
+            </article>
+          `;
+          focusStatus.textContent = "Focus feed unavailable";
+          focusUpdated.textContent = "Sync failed";
+          focusRisk.textContent = "Risks --";
+          focusExperiment.textContent = "Experiments --";
+          focusCommitment.textContent = "Commitments --";
+        }
+      };
+
       const loadSignals = async () => {
         try {
           const response = await fetch("/api/briefing-signals");
@@ -782,6 +1532,58 @@
         }
       };
 
+      const loadMomentum = async () => {
+        try {
+          const response = await fetch("/api/briefing-momentum");
+          if (!response.ok) throw new Error("Failed to load momentum");
+          const payload = await response.json();
+          renderMomentum(payload);
+        } catch (error) {
+          momentumStatus.textContent = "Momentum feed unavailable";
+          momentumUpdated.textContent = "Sync failed";
+          momentumUp.textContent = "Up --";
+          momentumDown.textContent = "Down --";
+          momentumFlat.textContent = "Flat --";
+          momentumGrid.innerHTML = `
+            <article class="momentum-card">
+              <span class="momentum-label">Offline</span>
+              <h3>Momentum updates unavailable</h3>
+              <p>We couldn't reach the momentum feed. Try again soon.</p>
+              <div class="momentum-meta">
+                <span>Owner: Briefing room</span>
+                <span>Metric: --</span>
+              </div>
+            </article>
+          `;
+        }
+      };
+
+      const loadHighlights = async () => {
+        try {
+          const response = await fetch("/api/briefing-highlights");
+          if (!response.ok) throw new Error("Failed to load highlights");
+          const payload = await response.json();
+          renderHighlights(payload);
+        } catch (error) {
+          highlightStatus.textContent = "Highlight feed unavailable";
+          highlightUpdated.textContent = "Sync failed";
+          highlightWin.textContent = "Wins --";
+          highlightRisk.textContent = "Risks --";
+          highlightWatch.textContent = "Watch --";
+          highlightGrid.innerHTML = `
+            <article class="highlight-card">
+              <span class="highlight-label">Offline</span>
+              <h3>Highlights unavailable</h3>
+              <p>We couldn't reach the executive highlight feed. Try again soon.</p>
+              <div class="highlight-meta">
+                <span>Owner: Briefing room</span>
+                <span>Impact: --</span>
+              </div>
+            </article>
+          `;
+        }
+      };
+
       const loadDecisions = async () => {
         try {
           const response = await fetch("/api/briefing-decisions");
@@ -814,6 +1616,106 @@
         }
       };
 
+      const loadActions = async () => {
+        try {
+          const response = await fetch("/api/briefing-actions");
+          if (!response.ok) throw new Error("Failed to load actions");
+          const payload = await response.json();
+          renderActions(payload);
+        } catch (error) {
+          actionStatus.textContent = "Action feed unavailable";
+          actionUpdated.textContent = "Sync failed";
+          actionTotal.textContent = "-- actions";
+          actionDue.textContent = "-- due soon";
+          actionBlocked.textContent = "-- blocked";
+          actionOverdue.textContent = "-- overdue";
+          actionGrid.innerHTML = `
+            <article class="action-card">
+              <span class="action-label">Offline</span>
+              <h3>Action queue unavailable</h3>
+              <p>We couldn't reach the action feed. Try again soon.</p>
+              <div class="action-meta">
+                <span>Owner: Briefing room</span>
+                <span>Due: --</span>
+                <span>Priority: --</span>
+                <span>Lane: --</span>
+              </div>
+            </article>
+          `;
+        }
+      };
+
+      const loadResources = async () => {
+        try {
+          const response = await fetch("/api/briefing-resources");
+          if (!response.ok) throw new Error("Failed to load resources");
+          const payload = await response.json();
+          renderResources(payload);
+        } catch (error) {
+          resourceStatus.textContent = "Resource feed unavailable";
+          resourceUpdated.textContent = "Sync failed";
+          resourceGrid.innerHTML = `
+            <article class="resource-card">
+              <span class="resource-label">Offline</span>
+              <h3>Resource intake unavailable</h3>
+              <p>Recheck the briefing database connection and try again.</p>
+            </article>
+          `;
+        }
+      };
+
+      const loadEscalations = async () => {
+        try {
+          const response = await fetch("/api/briefing-escalations");
+          if (!response.ok) throw new Error("Failed to load escalations");
+          const payload = await response.json();
+          renderEscalations(payload);
+        } catch (error) {
+          escalationStatus.textContent = "Escalation feed unavailable";
+          escalationUpdated.textContent = "Sync failed";
+          escalationOpen.textContent = "Open --";
+          escalationPending.textContent = "Pending --";
+          escalationResolved.textContent = "Resolved --";
+          escalationGrid.innerHTML = `
+            <article class="escalation-card">
+              <span class="escalation-label">Offline</span>
+              <h3>Escalation queue unavailable</h3>
+              <p>We couldn't reach the escalation feed. Try again soon.</p>
+              <div class="escalation-meta">
+                <span>Owner: Briefing room</span>
+                <span>ETA: --</span>
+              </div>
+            </article>
+          `;
+        }
+      };
+
+      const loadPartnerUpdates = async () => {
+        try {
+          const response = await fetch("/api/briefing-partners");
+          if (!response.ok) throw new Error("Failed to load partner readiness");
+          const payload = await response.json();
+          renderPartnerUpdates(payload);
+        } catch (error) {
+          partnerActive.textContent = "--";
+          partnerAverage.textContent = "Avg readiness --";
+          partnerHighRisk.textContent = "High risk --";
+          partnerUpcoming.textContent = "Renewals due --";
+          partnerUpdated.textContent = "Sync failed";
+          partnerGrid.innerHTML = `
+            <article class="partner-card">
+              <span class="partner-label">Offline</span>
+              <h3>Partner updates unavailable</h3>
+              <p>We couldn't reach the renewal feed. Try again soon.</p>
+              <div class="partner-meta">
+                <span>Owner: Partnerships</span>
+                <span>Next step: Retry sync</span>
+              </div>
+            </article>
+          `;
+        }
+      };
+
       const loadFieldNotes = async () => {
         try {
           const response = await fetch("/api/briefing-field-notes");
@@ -838,8 +1740,15 @@
       };
 
       loadSignals();
+      loadFocus();
       loadSummary();
+      loadMomentum();
+      loadHighlights();
       loadDecisions();
+      loadActions();
+      loadResources();
+      loadEscalations();
+      loadPartnerUpdates();
       loadFieldNotes();
     </script>
   </body>

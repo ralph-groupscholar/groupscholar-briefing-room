@@ -50,3 +50,23 @@
 - Added a Field Notes live feed backed by the production briefing database, including a new API endpoint and dynamic pulse stats.
 - Created the `briefing_room.field_notes` table with seeded signals and refreshed the seeding script to handle schema drift safely.
 - Updated the Field Notes UI to render live notes, spotlight cards, and offline fallbacks.
+
+## Iteration 8
+- Added a Partner Readiness Pulse section wired to a new briefing partners API feed for renewal status, readiness scores, and next steps.
+- Created a `briefing_room.partner_updates` table with seeded renewal data and surfaced readiness metrics in the UI.
+- Added new partner readiness styles plus client-side rendering and fallback states for the renewal feed.
+
+## Iteration 9
+- Fixed the Decision Studio metrics rendering to map directly from live database totals (confidence mix, gaps, escalations).
+- Wired the Briefing Focus feed to actually load at runtime so the focus board syncs with production data.
+- Prepared the briefing client for the next production deploy.
+
+## Iteration 10
+- Added an Escalation Watch section with live status tags, severity styling, and queue cards for leadership blockers.
+- Shipped a new briefing escalations API endpoint backed by a production `briefing_room.escalation_watch` table and seeded initial escalation records.
+- Updated the Briefing Room client to fetch and render escalation metrics with sync metadata.
+
+## Iteration 11
+- Added a Resource Requests section to track staffing, product, data, and finance asks with live status tags and impact notes.
+- Shipped a new briefing resources API endpoint backed by the `briefing_room.resource_requests` table and seeded production data.
+- Expanded briefing room styles and client logic to render the resource intake feed with sync metadata.

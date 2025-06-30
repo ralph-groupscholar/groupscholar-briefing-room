@@ -70,3 +70,4 @@
 - Added a Resource Requests section to track staffing, product, data, and finance asks with live status tags and impact notes.
 - Shipped a new briefing resources API endpoint backed by the `briefing_room.resource_requests` table and seeded production data.
 - Expanded briefing room styles and client logic to render the resource intake feed with sync metadata.
+- Deployment attempt blocked by the Vercel free-tier limit; retry after February 9, 2026.

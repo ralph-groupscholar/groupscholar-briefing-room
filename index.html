@@ -612,6 +612,42 @@
         </div>
       </section>
 
+      <section class="retention-forecast">
+        <div class="retention-header">
+          <div>
+            <h2>Retention outlook</h2>
+            <p>
+              Forecast cohort retention risks and next moves for scholar success,
+              pulled live from the briefing database.
+            </p>
+          </div>
+          <div class="retention-status">
+            <span>Retention sync</span>
+            <strong id="retention-status">Loading outlook...</strong>
+            <em id="retention-updated">Awaiting sync</em>
+          </div>
+        </div>
+        <div class="retention-tags">
+          <span id="retention-total">-- cohorts</span>
+          <span id="retention-critical">Critical --</span>
+          <span id="retention-high">High risk --</span>
+          <span id="retention-retention">Avg retention --%</span>
+          <span id="retention-due">Check-ins due --</span>
+        </div>
+        <div class="retention-grid" id="retention-grid">
+          <article class="retention-card">
+            <span class="retention-label">Syncing</span>
+            <h3>Pulling retention outlook</h3>
+            <p>Stand by while we fetch the cohort risk forecast.</p>
+            <div class="retention-meta">
+              <span>Owner: Briefing room</span>
+              <span>Risk score: --</span>
+              <span>Check-in: --</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section class="partner-readiness">
         <div class="partner-header">
           <div>
@@ -857,6 +893,14 @@
       const supportAtRisk = document.getElementById("support-at-risk");
       const supportBreached = document.getElementById("support-breached");
       const supportSla = document.getElementById("support-sla");
+      const retentionGrid = document.getElementById("retention-grid");
+      const retentionStatus = document.getElementById("retention-status");
+      const retentionUpdated = document.getElementById("retention-updated");
+      const retentionTotal = document.getElementById("retention-total");
+      const retentionCritical = document.getElementById("retention-critical");
+      const retentionHigh = document.getElementById("retention-high");
+      const retentionAvg = document.getElementById("retention-retention");
+      const retentionDue = document.getElementById("retention-due");
       const escalationGrid = document.getElementById("escalation-grid");
       const escalationStatus = document.getElementById("escalation-status");
       const escalationUpdated = document.getElementById("escalation-updated");
@@ -1322,6 +1366,132 @@
           : "Sync time unknown";
       };
 
+      const renderSupportPulse = (payload) => {
+        const updates = payload.updates || [];
+        const summary = payload.summary || {};
+
+        supportStatus.textContent = updates.length
+          ? `${updates.length} queues tracked`
+          : "No queues logged";
+        supportUpdated.textContent = payload.updatedAt
+          ? `Sync ${formatSyncTime(payload.updatedAt)}`
+          : "Sync time unknown";
+        supportTotal.textContent = `${summary.lanes ?? updates.length ?? "--"} lanes`;
+        supportOpen.textContent = `${summary.open_tickets ?? "--"} open tickets`;
+        supportAtRisk.textContent = `At risk ${summary.at_risk ?? "--"}`;
+        supportBreached.textContent = `Breached ${summary.breached ?? "--"}`;
+        supportSla.textContent = `Avg SLA ${summary.avg_sla ?? "--"}h`;
+
+        supportGrid.innerHTML = "";
+        if (!updates.length) {
+          supportGrid.innerHTML = `
+            <article class="support-card">
+              <span class="support-label">Clear lanes</span>
+              <h3>No support queues logged</h3>
+              <p>Scholar support queues will appear here once they are logged.</p>
+              <div class="support-meta">
+                <span>Category: Support</span>
+                <span>Owner: Scholar success</span>
+                <span>Open: --</span>
+                <span>SLA: --</span>
+              </div>
+            </article>
+          `;
+          return;
+        }
+
+        updates.forEach((update, index) => {
+          const status = normalizeText(update.sla_status);
+          const statusClass = status.includes("breach")
+            ? " breached"
+            : status.includes("risk")
+            ? " at-risk"
+            : "";
+          const card = document.createElement("article");
+          card.className = `support-card${index === 0 ? " highlight" : ""}${statusClass}`;
+          card.innerHTML = `
+            <span class="support-label">${update.sla_status || "On track"}</span>
+            <h3>${update.headline}</h3>
+            <p>${update.summary}</p>
+            <div class="support-meta">
+              <span>Category: ${update.category}</span>
+              <span>Owner: ${update.owner}</span>
+              <span>Open: ${update.open_count ?? "--"}</span>
+              <span>SLA: ${update.response_sla_hours ?? "--"}h</span>
+            </div>
+          `;
+          supportGrid.appendChild(card);
+        });
+      };
+
+      const renderRetention = (payload) => {
+        const forecast = payload.forecast || [];
+        const summary = payload.summary || {};
+
+        retentionStatus.textContent = forecast.length
+          ? `${forecast.length} cohorts tracked`
+          : "No cohorts logged";
+        retentionUpdated.textContent = payload.updatedAt
+          ? `Sync ${formatSyncTime(payload.updatedAt)}`
+          : "Sync time unknown";
+        retentionTotal.textContent =
+          summary.total != null ? `${summary.total} cohorts` : "-- cohorts";
+        retentionCritical.textContent =
+          summary.critical != null ? `Critical ${summary.critical}` : "Critical --";
+        retentionHigh.textContent =
+          summary.high_risk != null ? `High risk ${summary.high_risk}` : "High risk --";
+        retentionAvg.textContent =
+          summary.avg_retention != null
+            ? `Avg retention ${summary.avg_retention}%`
+            : "Avg retention --%";
+        retentionDue.textContent =
+          summary.due_soon != null
+            ? `Check-ins due ${summary.due_soon}`
+            : "Check-ins due --";
+
+        retentionGrid.innerHTML = "";
+        if (!forecast.length) {
+          retentionGrid.innerHTML = `
+            <article class="retention-card">
+              <span class="retention-label">Clear view</span>
+              <h3>No retention risks logged</h3>
+              <p>Retention forecasts will appear here once they are logged.</p>
+              <div class="retention-meta">
+                <span>Owner: Scholar success</span>
+                <span>Risk score: --</span>
+                <span>Check-in: --</span>
+              </div>
+            </article>
+          `;
+          return;
+        }
+
+        forecast.forEach((item, index) => {
+          const level = normalizeText(item.risk_level);
+          const levelClass = level.includes("critical")
+            ? " critical"
+            : level.includes("high")
+            ? " high"
+            : level.includes("moderate")
+            ? " moderate"
+            : "";
+          const card = document.createElement("article");
+          card.className = `retention-card${index === 0 ? " highlight" : ""}${levelClass}`;
+          card.innerHTML = `
+            <span class="retention-label">${item.risk_level || "Monitor"}</span>
+            <h3>${item.cohort}</h3>
+            <p>${item.risk_driver}</p>
+            <div class="retention-meta">
+              <span>Owner: ${item.owner}</span>
+              <span>Risk score: ${item.risk_score ?? "--"}</span>
+              <span>Check-in: ${formatDate(item.next_checkin)}</span>
+            </div>
+            <div class="retention-action">${item.next_action}</div>
+          `;
+          retentionGrid.appendChild(card);
+        });
+      };
+
       const renderEscalations = (payload) => {
         const items = payload.items || [];
         const summary = payload.summary || {};
@@ -1664,6 +1834,65 @@
         }
       };
 
+      const loadSupportPulse = async () => {
+        try {
+          const response = await fetch("/api/briefing-support");
+          if (!response.ok) throw new Error("Failed to load support pulse");
+          const payload = await response.json();
+          renderSupportPulse(payload);
+        } catch (error) {
+          supportStatus.textContent = "Support feed unavailable";
+          supportUpdated.textContent = "Sync failed";
+          supportTotal.textContent = "-- lanes";
+          supportOpen.textContent = "-- open tickets";
+          supportAtRisk.textContent = "At risk --";
+          supportBreached.textContent = "Breached --";
+          supportSla.textContent = "Avg SLA --h";
+          supportGrid.innerHTML = `
+            <article class="support-card">
+              <span class="support-label">Offline</span>
+              <h3>Support queues unavailable</h3>
+              <p>We couldn't reach the support pulse feed. Try again soon.</p>
+              <div class="support-meta">
+                <span>Category: Support</span>
+                <span>Owner: Briefing room</span>
+                <span>Open: --</span>
+                <span>SLA: --</span>
+              </div>
+            </article>
+          `;
+        }
+      };
+
+      const loadRetention = async () => {
+        try {
+          const response = await fetch("/api/briefing-retention");
+          if (!response.ok) throw new Error("Failed to load retention outlook");
+          const payload = await response.json();
+          renderRetention(payload);
+        } catch (error) {
+          retentionStatus.textContent = "Retention feed unavailable";
+          retentionUpdated.textContent = "Sync failed";
+          retentionTotal.textContent = "-- cohorts";
+          retentionCritical.textContent = "Critical --";
+          retentionHigh.textContent = "High risk --";
+          retentionAvg.textContent = "Avg retention --%";
+          retentionDue.textContent = "Check-ins due --";
+          retentionGrid.innerHTML = `
+            <article class="retention-card">
+              <span class="retention-label">Offline</span>
+              <h3>Retention outlook unavailable</h3>
+              <p>We couldn't reach the retention forecast feed. Try again soon.</p>
+              <div class="retention-meta">
+                <span>Owner: Scholar success</span>
+                <span>Risk score: --</span>
+                <span>Check-in: --</span>
+              </div>
+            </article>
+          `;
+        }
+      };
+
       const loadEscalations = async () => {
         try {
           const response = await fetch("/api/briefing-escalations");
@@ -1747,6 +1976,8 @@
       loadDecisions();
       loadActions();
       loadResources();
+      loadSupportPulse();
+      loadRetention();
       loadEscalations();
       loadPartnerUpdates();
       loadFieldNotes();

@@ -71,3 +71,13 @@
 - Shipped a new briefing resources API endpoint backed by the `briefing_room.resource_requests` table and seeded production data.
 - Expanded briefing room styles and client logic to render the resource intake feed with sync metadata.
 - Deployment attempt blocked by the Vercel free-tier limit; retry after February 9, 2026.
+
+## Iteration 11
+- Added the Executive Highlights API feed backed by a new `briefing_room.executive_highlights` table for wins, risks, and watch items.
+- Seeded production with executive highlight records and wired the highlights feed to return summary counts plus latest update timestamps.
+- Prepared the Briefing Room for the next deploy with the missing highlights endpoint now live.
+
+## Iteration 12
+- Removed the duplicate retention watch block so the briefing uses a single retention outlook feed without conflicting IDs.
+- Rewired the retention UI bindings to the correct summary tags (total, critical, average, due) so live data renders correctly.
+- Left the briefing ready for the next production deploy once the Vercel limit resets.

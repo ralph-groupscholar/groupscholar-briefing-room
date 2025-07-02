@@ -27,54 +27,57 @@ module.exports = async (req, res) => {
   try {
     await client.connect();
 
-    const callsQuery = client.query(
+    const updatesQuery = client.query(
       `
-        select id,
-               title,
-               summary,
-               owner,
-               decision_by,
-               confidence,
-               status,
-               created_at
-        from briefing_room.decision_calls
-        order by created_at desc
-        limit 3;
+        select
+          id,
+          partner_name,
+          status,
+          readiness_score,
+          renewal_date,
+          risk_level,
+          owner,
+          next_step,
+          summary,
+          updated_at
+        from briefing_room.partner_updates
+        order by
+          renewal_date is null,
+          renewal_date asc,
+          updated_at desc
+        limit 6;
       `
     );
 
     const metricsQuery = client.query(
       `
         select
-          count(*)::int as total,
-          count(*) filter (where lower(confidence) = 'high')::int as high,
-          count(*) filter (where lower(confidence) = 'medium')::int as medium,
-          count(*) filter (where lower(confidence) = 'low')::int as low,
+          count(*)::int as active,
+          round(avg(readiness_score))::int as average_readiness,
+          count(*) filter (where lower(risk_level) = 'high')::int as high_risk,
           count(*) filter (
-            where lower(status) in ('pending', 'blocked')
-          )::int as coverage_gaps,
-          count(*) filter (
-            where lower(status) in ('priority', 'escalated')
-          )::int as escalations,
-          max(created_at) as latest_decision_at
-        from briefing_room.decision_calls;
+            where renewal_date is not null
+              and renewal_date <= current_date + interval '45 days'
+          )::int as due_soon,
+          max(updated_at) as latest_update
+        from briefing_room.partner_updates;
       `
     );
 
-    const [callsResult, metricsResult] = await Promise.all([
-      callsQuery,
+    const [updatesResult, metricsResult] = await Promise.all([
+      updatesQuery,
       metricsQuery
     ]);
 
     res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
     res.status(200).json({
       updatedAt: new Date().toISOString(),
-      calls: callsResult.rows,
+      updates: updatesResult.rows,
       metrics: metricsResult.rows[0]
     });
   } catch (error) {
     res.status(500).json({
-      error: "Failed to load decision calls",
+      error: "Failed to load partner readiness",
       details: error.message
     });
   } finally {

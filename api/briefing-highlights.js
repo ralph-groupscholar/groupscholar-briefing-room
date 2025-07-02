@@ -27,54 +27,49 @@ module.exports = async (req, res) => {
   try {
     await client.connect();
 
-    const callsQuery = client.query(
+    const highlightsQuery = client.query(
       `
-        select id,
-               title,
-               summary,
-               owner,
-               decision_by,
-               confidence,
-               status,
-               created_at
-        from briefing_room.decision_calls
+        select
+          id,
+          category,
+          headline,
+          summary,
+          owner,
+          impact,
+          status,
+          created_at
+        from briefing_room.executive_highlights
         order by created_at desc
-        limit 3;
+        limit 6;
       `
     );
 
-    const metricsQuery = client.query(
+    const summaryQuery = client.query(
       `
         select
           count(*)::int as total,
-          count(*) filter (where lower(confidence) = 'high')::int as high,
-          count(*) filter (where lower(confidence) = 'medium')::int as medium,
-          count(*) filter (where lower(confidence) = 'low')::int as low,
-          count(*) filter (
-            where lower(status) in ('pending', 'blocked')
-          )::int as coverage_gaps,
-          count(*) filter (
-            where lower(status) in ('priority', 'escalated')
-          )::int as escalations,
-          max(created_at) as latest_decision_at
-        from briefing_room.decision_calls;
+          count(*) filter (where lower(category) = 'win')::int as wins,
+          count(*) filter (where lower(category) = 'risk')::int as risks,
+          count(*) filter (where lower(category) = 'watch')::int as watch,
+          max(created_at) as latest_update
+        from briefing_room.executive_highlights;
       `
     );
 
-    const [callsResult, metricsResult] = await Promise.all([
-      callsQuery,
-      metricsQuery
+    const [highlightsResult, summaryResult] = await Promise.all([
+      highlightsQuery,
+      summaryQuery
     ]);
 
     res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
     res.status(200).json({
       updatedAt: new Date().toISOString(),
-      calls: callsResult.rows,
-      metrics: metricsResult.rows[0]
+      highlights: highlightsResult.rows,
+      summary: summaryResult.rows[0]
     });
   } catch (error) {
     res.status(500).json({
-      error: "Failed to load decision calls",
+      error: "Failed to load executive highlights",
       details: error.message
     });
   } finally {

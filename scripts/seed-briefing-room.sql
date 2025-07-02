@@ -72,6 +72,17 @@ create table if not exists briefing_room.momentum_updates (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists briefing_room.executive_highlights (
+  id serial primary key,
+  category text not null,
+  headline text not null,
+  summary text not null,
+  owner text not null,
+  impact text,
+  status text,
+  created_at timestamptz not null default now()
+);
+
 create table if not exists briefing_room.escalation_watch (
   id serial primary key,
   category text not null,
@@ -107,6 +118,114 @@ create table if not exists briefing_room.resource_requests (
   needed_by date,
   impact text not null,
   created_at timestamptz not null default now()
+);
+
+create table if not exists briefing_room.support_pulse (
+  id serial primary key,
+  category text not null,
+  headline text not null,
+  summary text not null,
+  owner text not null,
+  open_count int not null,
+  sla_status text not null,
+  response_sla_hours int not null,
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists briefing_room.retention_forecast (
+  id serial primary key,
+  cohort text not null,
+  risk_level text not null,
+  risk_driver text not null,
+  owner text not null,
+  risk_score int not null,
+  projected_retention numeric(5, 2) not null,
+  next_action text not null,
+  next_checkin date,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists briefing_room.review_load_forecast (
+  id serial primary key,
+  stage text not null,
+  queue_size int not null,
+  reviewers_ready int not null,
+  sla_days int not null,
+  risk_level text not null,
+  owner text not null,
+  next_action text not null,
+  updated_at timestamptz not null default now()
+);
+
+with new_review_load (stage, queue_size, reviewers_ready, sla_days, risk_level, owner, next_action) as (
+  values
+    (
+      'Eligibility screen',
+      128,
+      6,
+      2,
+      'Medium',
+      'Ops review pod',
+      'Shift two reviewers to eligibility for 48 hours to keep SLA under 2 days.'
+    ),
+    (
+      'Essay scoring',
+      94,
+      4,
+      4,
+      'High',
+      'Reviewer lead',
+      'Activate standby reviewers and extend scoring office hours this week.'
+    ),
+    (
+      'Reference checks',
+      31,
+      3,
+      3,
+      'Medium',
+      'Scholar success',
+      'Automate two follow-up reminders to cut wait time in half.'
+    ),
+    (
+      'Final committee',
+      18,
+      2,
+      5,
+      'High',
+      'Program director',
+      'Lock committee calendar and pre-read pack by Wednesday.'
+    ),
+    (
+      'Award verification',
+      52,
+      5,
+      2,
+      'Low',
+      'Finance',
+      'Maintain current staffing; no intervention needed.'
+    )
+)
+insert into briefing_room.review_load_forecast (
+  stage,
+  queue_size,
+  reviewers_ready,
+  sla_days,
+  risk_level,
+  owner,
+  next_action
+)
+select new_review_load.stage,
+       new_review_load.queue_size,
+       new_review_load.reviewers_ready,
+       new_review_load.sla_days,
+       new_review_load.risk_level,
+       new_review_load.owner,
+       new_review_load.next_action
+from new_review_load
+where not exists (
+  select 1
+  from briefing_room.review_load_forecast
+  where review_load_forecast.stage = new_review_load.stage
 );
 
 with new_signals (title, summary, owner, urgency, target_date, source) as (
@@ -392,6 +511,165 @@ where not exists (
   where resource_requests.title = new_requests.title
 );
 
+with new_support (category, headline, summary, owner, open_count, sla_status, response_sla_hours) as (
+  values
+    (
+      'Verification',
+      'Document checks still drawing the most tickets',
+      'Verification reminders dropped repeat tickets, but 38 open cases still need a second touch by Tuesday.',
+      'Scholar success',
+      38,
+      'At risk',
+      36
+    ),
+    (
+      'Payments',
+      'Disbursement questions spiking after award updates',
+      'Payment timing questions rose after the Cohort 3 award variance note. Publish the updated payout FAQ.',
+      'Finance',
+      26,
+      'At risk',
+      42
+    ),
+    (
+      'Portal',
+      'Mobile banner regression is now stable',
+      'Android progress banner is fixed; monitor the queue for any resurgence this week.',
+      'Product',
+      9,
+      'On track',
+      24
+    ),
+    (
+      'Scholar comms',
+      'Timeline clarity requests still elevated',
+      'SMS + email response rates improved, but 17 scholars are still waiting on a clear verification window.',
+      'Comms',
+      17,
+      'At risk',
+      30
+    ),
+    (
+      'Partner helpdesk',
+      'Renewal data requests nearing SLA',
+      'Two partner data pulls are within 6 hours of SLA; prioritize exports for Harborlight and Northwind.',
+      'Data',
+      6,
+      'Breached',
+      60
+    )
+)
+insert into briefing_room.support_pulse (
+  category,
+  headline,
+  summary,
+  owner,
+  open_count,
+  sla_status,
+  response_sla_hours
+)
+select new_support.category,
+       new_support.headline,
+       new_support.summary,
+       new_support.owner,
+       new_support.open_count,
+       new_support.sla_status,
+       new_support.response_sla_hours
+from new_support
+where not exists (
+  select 1
+  from briefing_room.support_pulse
+  where support_pulse.headline = new_support.headline
+);
+
+with new_retention (
+  cohort,
+  risk_level,
+  risk_driver,
+  owner,
+  risk_score,
+  projected_retention,
+  next_action,
+  next_checkin
+) as (
+  values
+    (
+      'Cohort 2025-B',
+      'Critical',
+      'Verification fatigue and missed doc deadlines',
+      'Scholar success',
+      92,
+      68.5,
+      'Launch daily doc sprint and 1:1 outreach for top 12 scholars.',
+      '2026-02-13'
+    ),
+    (
+      'Cohort 2026-A',
+      'High',
+      'Inconsistent mentor coverage in week 2',
+      'Mentor ops',
+      81,
+      74.2,
+      'Add two floating mentors and run a coverage heatmap review.',
+      '2026-02-15'
+    ),
+    (
+      'STEM Transfer Track',
+      'High',
+      'Financial aid letters delayed at partner schools',
+      'Partnerships',
+      79,
+      72.6,
+      'Escalate with partner contacts and prep interim grant bridge.',
+      '2026-02-14'
+    ),
+    (
+      'Cohort 2025-A',
+      'Moderate',
+      'Scholar confidence dip after Round 2',
+      'Program ops',
+      64,
+      80.1,
+      'Deploy recap session and highlight success stories.',
+      '2026-02-20'
+    ),
+    (
+      'Bridge Scholars',
+      'Low',
+      'Steady momentum with minor schedule slips',
+      'Scholar success',
+      38,
+      88.9,
+      'Keep weekly nudges and monitor attendance.',
+      '2026-02-22'
+    )
+)
+insert into briefing_room.retention_forecast (
+  cohort,
+  risk_level,
+  risk_driver,
+  owner,
+  risk_score,
+  projected_retention,
+  next_action,
+  next_checkin
+)
+select new_retention.cohort,
+       new_retention.risk_level,
+       new_retention.risk_driver,
+       new_retention.owner,
+       new_retention.risk_score,
+       new_retention.projected_retention,
+       new_retention.next_action,
+       new_retention.next_checkin::date
+from new_retention
+where not exists (
+  select 1
+  from briefing_room.retention_forecast
+  where retention_forecast.cohort = new_retention.cohort
+    and retention_forecast.risk_driver = new_retention.risk_driver
+);
+
 with new_notes (category, headline, summary, source, owner, priority, spotlight) as (
   values
     (
@@ -610,6 +888,77 @@ where not exists (
   select 1
   from briefing_room.momentum_updates
   where momentum_updates.headline = new_momentum.headline
+);
+
+with new_highlights (
+  category,
+  headline,
+  summary,
+  owner,
+  impact,
+  status
+) as (
+  values
+    (
+      'Win',
+      'Verification backlog down 40% with new cadence',
+      'Support pod 2 cleared 7 cases and is on track to close the remaining 11 by Wednesday.',
+      'Scholar success',
+      'Faster award readiness for cohort 4',
+      'On track'
+    ),
+    (
+      'Win',
+      'Ambassador referral sprint lifted intake 12%',
+      'Chicago + Detroit pilots outperformed the baseline; growth is ready to scale the playbook.',
+      'Growth',
+      'Adds 180 applicants to funnel',
+      'Scaling'
+    ),
+    (
+      'Risk',
+      'Consent forms missing for 12 scholars',
+      'Awards cannot be released until guardian consent is verified for the remaining cases.',
+      'Scholar success',
+      'Potential award delay',
+      'Escalated'
+    ),
+    (
+      'Watch',
+      'Renewal deck needs final impact vignette',
+      'Northwind Trust renewal call hinges on the Q4 outcomes story; design is in progress.',
+      'Partnerships',
+      'Renewal confidence',
+      'In review'
+    ),
+    (
+      'Watch',
+      'Reviewer staffing gap may extend Round 2',
+      'Two reviewers are out this week; coverage plan is pending approval.',
+      'Program ops',
+      'Decision timing risk',
+      'Pending'
+    )
+)
+insert into briefing_room.executive_highlights (
+  category,
+  headline,
+  summary,
+  owner,
+  impact,
+  status
+)
+select new_highlights.category,
+       new_highlights.headline,
+       new_highlights.summary,
+       new_highlights.owner,
+       new_highlights.impact,
+       new_highlights.status
+from new_highlights
+where not exists (
+  select 1
+  from briefing_room.executive_highlights
+  where executive_highlights.headline = new_highlights.headline
 );
 
 with new_escalations (

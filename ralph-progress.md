@@ -81,3 +81,9 @@
 - Removed the duplicate retention watch block so the briefing uses a single retention outlook feed without conflicting IDs.
 - Rewired the retention UI bindings to the correct summary tags (total, critical, average, due) so live data renders correctly.
 - Left the briefing ready for the next production deploy once the Vercel limit resets.
+
+## Iteration 13
+- Added a fully styled Review Load Forecast section so the live review queue feed is readable alongside the rest of the briefing modules.
+- Introduced risk-level styling for review load cards, matching the existing briefing visual system.
+- Re-seeded the production briefing database to ensure the review load forecast data is populated.
+- Deployment pending due to the Vercel free-tier limit; retry after February 9, 2026.

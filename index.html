@@ -575,6 +575,42 @@
         </div>
       </section>
 
+      <section class="review-load">
+        <div class="review-header">
+          <div>
+            <h2>Review load forecast</h2>
+            <p>
+              Track reviewer capacity, queue size, and SLA risk across the
+              scholarship pipeline in real time.
+            </p>
+          </div>
+          <div class="review-status">
+            <span>Review sync</span>
+            <strong id="review-status">Loading review load...</strong>
+            <em id="review-updated">Awaiting sync</em>
+          </div>
+        </div>
+        <div class="review-tags">
+          <span id="review-lanes">-- lanes</span>
+          <span id="review-queue">Queue --</span>
+          <span id="review-sla">Avg SLA --d</span>
+          <span id="review-high-risk">High risk --</span>
+        </div>
+        <div class="review-grid" id="review-grid">
+          <article class="review-card">
+            <span class="review-label">Syncing</span>
+            <h3>Pulling review load</h3>
+            <p>Briefing room is connecting to the review forecast feed.</p>
+            <div class="review-meta">
+              <span>Queue: --</span>
+              <span>Reviewers: --</span>
+              <span>SLA: --</span>
+              <span>Owner: Briefing room</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section class="support-pulse">
         <div class="support-header">
           <div>
@@ -643,6 +679,41 @@
               <span>Owner: Briefing room</span>
               <span>Risk score: --</span>
               <span>Check-in: --</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="success-forecast">
+        <div class="success-header">
+          <div>
+            <h2>Scholar success forecast</h2>
+            <p>
+              Predict cohort momentum toward completion, scholarship renewals, and
+              near-term interventions from the briefing database.
+            </p>
+          </div>
+          <div class="success-status">
+            <span>Success sync</span>
+            <strong id="success-status">Loading forecast...</strong>
+            <em id="success-updated">Awaiting sync</em>
+          </div>
+        </div>
+        <div class="success-tags">
+          <span id="success-total">-- cohorts</span>
+          <span id="success-average">Avg success --</span>
+          <span id="success-at-risk">At risk --</span>
+          <span id="success-due">Milestones due --</span>
+        </div>
+        <div class="success-grid" id="success-grid">
+          <article class="success-card">
+            <span class="success-label">Syncing</span>
+            <h3>Pulling success forecast</h3>
+            <p>Briefing room is connecting to the scholar success forecast feed.</p>
+            <div class="success-meta">
+              <span>Owner: Briefing room</span>
+              <span>Score: --</span>
+              <span>Milestone: --</span>
             </div>
           </article>
         </div>
@@ -885,6 +956,13 @@
       const resourcePending = document.getElementById("resource-pending");
       const resourceApproved = document.getElementById("resource-approved");
       const resourceDue = document.getElementById("resource-due");
+      const reviewGrid = document.getElementById("review-grid");
+      const reviewStatus = document.getElementById("review-status");
+      const reviewUpdated = document.getElementById("review-updated");
+      const reviewLanes = document.getElementById("review-lanes");
+      const reviewQueue = document.getElementById("review-queue");
+      const reviewSla = document.getElementById("review-sla");
+      const reviewHighRisk = document.getElementById("review-high-risk");
       const supportGrid = document.getElementById("support-grid");
       const supportStatus = document.getElementById("support-status");
       const supportUpdated = document.getElementById("support-updated");
@@ -901,6 +979,13 @@
       const retentionHigh = document.getElementById("retention-high");
       const retentionAvg = document.getElementById("retention-retention");
       const retentionDue = document.getElementById("retention-due");
+      const successGrid = document.getElementById("success-grid");
+      const successStatus = document.getElementById("success-status");
+      const successUpdated = document.getElementById("success-updated");
+      const successTotal = document.getElementById("success-total");
+      const successAverage = document.getElementById("success-average");
+      const successAtRisk = document.getElementById("success-at-risk");
+      const successDue = document.getElementById("success-due");
       const escalationGrid = document.getElementById("escalation-grid");
       const escalationStatus = document.getElementById("escalation-status");
       const escalationUpdated = document.getElementById("escalation-updated");
@@ -1366,6 +1451,69 @@
           : "Sync time unknown";
       };
 
+      const renderReviewLoad = (payload) => {
+        const updates = payload.updates || [];
+        const summary = payload.summary || {};
+
+        reviewStatus.textContent =
+          summary.lanes != null
+            ? `${summary.lanes} review lanes`
+            : "Review load online";
+        reviewUpdated.textContent = summary.latest_update
+          ? `Latest update ${formatSyncTime(summary.latest_update)}`
+          : payload.updatedAt
+          ? `Sync ${formatSyncTime(payload.updatedAt)}`
+          : "Sync time unknown";
+        reviewLanes.textContent = `${summary.lanes ?? updates.length ?? "--"} lanes`;
+        reviewQueue.textContent = `Queue ${summary.total_queue ?? "--"}`;
+        reviewSla.textContent = `Avg SLA ${summary.avg_sla ?? "--"}d`;
+        reviewHighRisk.textContent = `High risk ${summary.high_risk ?? "--"}`;
+
+        reviewGrid.innerHTML = "";
+        if (!updates.length) {
+          reviewGrid.innerHTML = `
+            <article class="review-card">
+              <span class="review-label">Clear lanes</span>
+              <h3>No review load updates</h3>
+              <p>Review forecast items will appear here once they are logged.</p>
+              <div class="review-meta">
+                <span>Queue: --</span>
+                <span>Reviewers: --</span>
+                <span>SLA: --</span>
+                <span>Owner: Review ops</span>
+              </div>
+            </article>
+          `;
+          return;
+        }
+
+        updates.forEach((update, index) => {
+          const riskLevel = normalizeText(update.risk_level);
+          const riskClass =
+            riskLevel === "high"
+              ? " high"
+              : riskLevel === "medium"
+              ? " medium"
+              : riskLevel === "low"
+              ? " low"
+              : "";
+          const card = document.createElement("article");
+          card.className = `review-card${index === 0 ? " highlight" : ""}${riskClass}`;
+          card.innerHTML = `
+            <span class="review-label">${update.risk_level || "Monitor"}</span>
+            <h3>${update.stage}</h3>
+            <p>${update.next_action}</p>
+            <div class="review-meta">
+              <span>Queue: ${update.queue_size ?? "--"}</span>
+              <span>Reviewers: ${update.reviewers_ready ?? "--"}</span>
+              <span>SLA: ${update.sla_days ?? "--"}d</span>
+              <span>Owner: ${update.owner}</span>
+            </div>
+          `;
+          reviewGrid.appendChild(card);
+        });
+      };
+
       const renderSupportPulse = (payload) => {
         const updates = payload.updates || [];
         const summary = payload.summary || {};
@@ -1489,6 +1637,66 @@
             <div class="retention-action">${item.next_action}</div>
           `;
           retentionGrid.appendChild(card);
+        });
+      };
+
+      const renderSuccessForecast = (payload) => {
+        const forecast = payload.forecast || [];
+        const summary = payload.summary || {};
+
+        successStatus.textContent = forecast.length
+          ? `${forecast.length} cohorts scored`
+          : "No success data logged";
+        successUpdated.textContent = payload.updatedAt
+          ? `Sync ${formatSyncTime(payload.updatedAt)}`
+          : "Sync time unknown";
+        successTotal.textContent =
+          summary.total != null ? `${summary.total} cohorts` : "-- cohorts";
+        successAverage.textContent =
+          summary.avg_score != null ? `Avg success ${summary.avg_score}` : "Avg success --";
+        successAtRisk.textContent =
+          summary.at_risk != null ? `At risk ${summary.at_risk}` : "At risk --";
+        successDue.textContent =
+          summary.due_soon != null ? `Milestones due ${summary.due_soon}` : "Milestones due --";
+
+        successGrid.innerHTML = "";
+        if (!forecast.length) {
+          successGrid.innerHTML = `
+            <article class="success-card">
+              <span class="success-label">Clear view</span>
+              <h3>No success risks logged</h3>
+              <p>Success forecasts will appear here once they are logged.</p>
+              <div class="success-meta">
+                <span>Owner: Scholar success</span>
+                <span>Score: --</span>
+                <span>Milestone: --</span>
+              </div>
+            </article>
+          `;
+          return;
+        }
+
+        forecast.forEach((item, index) => {
+          const confidence = normalizeText(item.confidence);
+          const confidenceClass = confidence.includes("high")
+            ? " strong"
+            : confidence.includes("low")
+            ? " at-risk"
+            : " watch";
+          const card = document.createElement("article");
+          card.className = `success-card${index === 0 ? " highlight" : ""}${confidenceClass}`;
+          card.innerHTML = `
+            <span class="success-label">${item.confidence || "Monitor"}</span>
+            <h3>${item.cohort}</h3>
+            <p>${item.risk_factor}</p>
+            <div class="success-meta">
+              <span>Owner: ${item.owner}</span>
+              <span>Score: ${item.success_score ?? "--"}</span>
+              <span>Milestone: ${formatDate(item.milestone_date)}</span>
+            </div>
+            <div class="success-action">${item.next_action}</div>
+          `;
+          successGrid.appendChild(card);
         });
       };
 
@@ -1834,6 +2042,35 @@
         }
       };
 
+      const loadReviewLoad = async () => {
+        try {
+          const response = await fetch("/api/briefing-review-load");
+          if (!response.ok) throw new Error("Failed to load review load");
+          const payload = await response.json();
+          renderReviewLoad(payload);
+        } catch (error) {
+          reviewStatus.textContent = "Review load unavailable";
+          reviewUpdated.textContent = "Sync failed";
+          reviewLanes.textContent = "-- lanes";
+          reviewQueue.textContent = "Queue --";
+          reviewSla.textContent = "Avg SLA --d";
+          reviewHighRisk.textContent = "High risk --";
+          reviewGrid.innerHTML = `
+            <article class="review-card">
+              <span class="review-label">Offline</span>
+              <h3>Review load unavailable</h3>
+              <p>We couldn't reach the review forecast feed. Try again soon.</p>
+              <div class="review-meta">
+                <span>Queue: --</span>
+                <span>Reviewers: --</span>
+                <span>SLA: --</span>
+                <span>Owner: Review ops</span>
+              </div>
+            </article>
+          `;
+        }
+      };
+
       const loadSupportPulse = async () => {
         try {
           const response = await fetch("/api/briefing-support");
@@ -1887,6 +2124,34 @@
                 <span>Owner: Scholar success</span>
                 <span>Risk score: --</span>
                 <span>Check-in: --</span>
+              </div>
+            </article>
+          `;
+        }
+      };
+
+      const loadSuccessForecast = async () => {
+        try {
+          const response = await fetch("/api/briefing-success-forecast");
+          if (!response.ok) throw new Error("Failed to load success forecast");
+          const payload = await response.json();
+          renderSuccessForecast(payload);
+        } catch (error) {
+          successStatus.textContent = "Success forecast unavailable";
+          successUpdated.textContent = "Sync failed";
+          successTotal.textContent = "-- cohorts";
+          successAverage.textContent = "Avg success --";
+          successAtRisk.textContent = "At risk --";
+          successDue.textContent = "Milestones due --";
+          successGrid.innerHTML = `
+            <article class="success-card">
+              <span class="success-label">Offline</span>
+              <h3>Success forecast unavailable</h3>
+              <p>We couldn't reach the success forecast feed. Try again soon.</p>
+              <div class="success-meta">
+                <span>Owner: Scholar success</span>
+                <span>Score: --</span>
+                <span>Milestone: --</span>
               </div>
             </article>
           `;
@@ -1976,8 +2241,10 @@
       loadDecisions();
       loadActions();
       loadResources();
+      loadReviewLoad();
       loadSupportPulse();
       loadRetention();
+      loadSuccessForecast();
       loadEscalations();
       loadPartnerUpdates();
       loadFieldNotes();

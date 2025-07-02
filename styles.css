@@ -1143,6 +1143,254 @@ main {
   font-size: 0.9rem;
 }
 
+.review-load {
+  display: grid;
+  gap: 24px;
+  margin-bottom: 60px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.review-header p {
+  max-width: 520px;
+  color: rgba(15, 18, 23, 0.7);
+  margin-top: 8px;
+}
+
+.review-status {
+  background: rgba(255, 255, 255, 0.75);
+  padding: 16px 20px;
+  border-radius: 20px;
+  box-shadow: 0 16px 30px rgba(15, 18, 23, 0.12);
+}
+
+.review-status span {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  color: rgba(15, 18, 23, 0.55);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.review-status strong {
+  font-size: 1.2rem;
+}
+
+.review-status em {
+  display: block;
+  font-size: 0.85rem;
+  color: rgba(15, 18, 23, 0.6);
+  margin-top: 4px;
+}
+
+.review-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: rgba(15, 18, 23, 0.7);
+  font-size: 0.85rem;
+}
+
+.review-tags span {
+  text-transform: none;
+  letter-spacing: normal;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(15, 18, 23, 0.08);
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.review-card {
+  background: rgba(255, 255, 255, 0.82);
+  padding: 22px;
+  border-radius: 22px;
+  box-shadow: 0 18px 32px rgba(15, 18, 23, 0.12);
+  display: grid;
+  gap: 12px;
+  border: 1px solid rgba(100, 160, 255, 0.18);
+}
+
+.review-card h3 {
+  font-family: "Fraunces", "Times New Roman", serif;
+  font-size: 1.25rem;
+}
+
+.review-label {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  color: rgba(15, 18, 23, 0.6);
+}
+
+.review-card p {
+  color: rgba(15, 18, 23, 0.75);
+  line-height: 1.5;
+}
+
+.review-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: rgba(15, 18, 23, 0.6);
+}
+
+.review-card.highlight {
+  background: linear-gradient(140deg, rgba(100, 160, 255, 0.2), rgba(105, 213, 177, 0.15));
+}
+
+.review-card.high {
+  border-color: rgba(241, 126, 102, 0.45);
+}
+
+.review-card.medium {
+  border-color: rgba(241, 206, 102, 0.45);
+}
+
+.review-card.low {
+  border-color: rgba(105, 213, 177, 0.35);
+}
+
+.success-forecast {
+  display: grid;
+  gap: 24px;
+  margin-bottom: 60px;
+}
+
+.success-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.success-header p {
+  max-width: 520px;
+  color: rgba(15, 18, 23, 0.7);
+  margin-top: 8px;
+}
+
+.success-status {
+  background: rgba(255, 255, 255, 0.75);
+  padding: 16px 20px;
+  border-radius: 20px;
+  box-shadow: 0 16px 30px rgba(15, 18, 23, 0.12);
+}
+
+.success-status span {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  color: rgba(15, 18, 23, 0.55);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.success-status strong {
+  font-size: 1.2rem;
+}
+
+.success-status em {
+  display: block;
+  font-size: 0.85rem;
+  color: rgba(15, 18, 23, 0.6);
+  margin-top: 4px;
+}
+
+.success-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: rgba(15, 18, 23, 0.7);
+  font-size: 0.85rem;
+}
+
+.success-tags span {
+  text-transform: none;
+  letter-spacing: normal;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(15, 18, 23, 0.08);
+}
+
+.success-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.success-card {
+  background: rgba(255, 255, 255, 0.82);
+  padding: 22px;
+  border-radius: 22px;
+  box-shadow: 0 18px 32px rgba(15, 18, 23, 0.12);
+  display: grid;
+  gap: 12px;
+  border: 1px solid rgba(15, 18, 23, 0.08);
+}
+
+.success-card h3 {
+  font-family: "Fraunces", "Times New Roman", serif;
+  font-size: 1.25rem;
+}
+
+.success-label {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  color: rgba(15, 18, 23, 0.6);
+}
+
+.success-card p {
+  color: rgba(15, 18, 23, 0.75);
+  line-height: 1.5;
+}
+
+.success-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: rgba(15, 18, 23, 0.6);
+}
+
+.success-action {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(15, 18, 23, 0.08);
+  color: rgba(15, 18, 23, 0.75);
+  font-size: 0.9rem;
+}
+
+.success-card.highlight {
+  background: linear-gradient(140deg, rgba(105, 213, 177, 0.18), rgba(241, 206, 102, 0.2));
+}
+
+.success-card.strong {
+  border-color: rgba(105, 213, 177, 0.55);
+}
+
+.success-card.watch {
+  border-color: rgba(241, 206, 102, 0.5);
+}
+
+.success-card.at-risk {
+  border-color: rgba(241, 126, 102, 0.6);
+}
+
 .partner-readiness {
   display: grid;
   gap: 24px;

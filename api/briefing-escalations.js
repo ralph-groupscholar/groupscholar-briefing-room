@@ -27,54 +27,50 @@ module.exports = async (req, res) => {
   try {
     await client.connect();
 
-    const callsQuery = client.query(
+    const itemsQuery = client.query(
       `
-        select id,
-               title,
-               summary,
-               owner,
-               decision_by,
-               confidence,
-               status,
-               created_at
-        from briefing_room.decision_calls
+        select
+          id,
+          category,
+          issue,
+          impact,
+          owner,
+          status,
+          eta,
+          severity,
+          created_at
+        from briefing_room.escalation_watch
         order by created_at desc
-        limit 3;
+        limit 6;
       `
     );
 
-    const metricsQuery = client.query(
+    const summaryQuery = client.query(
       `
         select
           count(*)::int as total,
-          count(*) filter (where lower(confidence) = 'high')::int as high,
-          count(*) filter (where lower(confidence) = 'medium')::int as medium,
-          count(*) filter (where lower(confidence) = 'low')::int as low,
-          count(*) filter (
-            where lower(status) in ('pending', 'blocked')
-          )::int as coverage_gaps,
-          count(*) filter (
-            where lower(status) in ('priority', 'escalated')
-          )::int as escalations,
-          max(created_at) as latest_decision_at
-        from briefing_room.decision_calls;
+          count(*) filter (where lower(status) = 'open')::int as open,
+          count(*) filter (where lower(status) = 'pending')::int as pending,
+          count(*) filter (where lower(status) = 'resolved')::int as resolved,
+          max(created_at) as latest_update
+        from briefing_room.escalation_watch;
       `
     );
 
-    const [callsResult, metricsResult] = await Promise.all([
-      callsQuery,
-      metricsQuery
+    const [itemsResult, summaryResult] = await Promise.all([
+      itemsQuery,
+      summaryQuery
     ]);
 
     res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
     res.status(200).json({
       updatedAt: new Date().toISOString(),
-      calls: callsResult.rows,
-      metrics: metricsResult.rows[0]
+      items: itemsResult.rows,
+      summary: summaryResult.rows[0]
     });
   } catch (error) {
     res.status(500).json({
-      error: "Failed to load decision calls",
+      error: "Failed to load escalations",
       details: error.message
     });
   } finally {
